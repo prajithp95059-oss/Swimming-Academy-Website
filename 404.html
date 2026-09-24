@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Not Found | Stackly Aqua Academy</title>
+<meta name="description" content="The page you're looking for could not be found.">
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --cream:#faf3e6;
+    --teal:#0c6e6a;
+    --teal-dark:#084d4a;
+    --teal-light:#12908a;
+    --gold:#d9a441;
+    --coral:#ff7a59;
+    --ink:#1c2b2a;
+    --ink-soft:#4a5c5b;
+    --white:#ffffff;
+    --line: rgba(12,110,106,0.16);
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Poppins',Arial,sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:24px;
+    overflow-x:hidden;
+  }
+  .wrap{
+    max-width:520px;
+    width:100%;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+    opacity:0;
+    transform:translateY(16px);
+    animation:riseIn .7s cubic-bezier(.22,.9,.3,1) forwards;
+  }
+  @keyframes riseIn{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion: reduce){ .wrap{ animation:none; opacity:1; transform:none; } }
+
+  .logo{ height:40px; width:auto; border-radius:8px; margin-bottom:4px; }
+
+  .wave{ width:90px; height:auto; color:var(--teal-light); }
+
+  .code{
+    font-family:'Playfair Display',Georgia,serif;
+    font-weight:700;
+    font-size:clamp(4.5rem,14vw,7rem);
+    line-height:1;
+    color:var(--teal);
+    letter-spacing:-.02em;
+  }
+  .code em{ font-style:italic; color:var(--gold); }
+
+  h1{
+    font-family:'Playfair Display',Georgia,serif;
+    font-weight:600;
+    font-size:clamp(1.3rem,3.4vw,1.7rem);
+    color:var(--ink);
+  }
+  p{
+    color:var(--ink-soft);
+    font-size:0.98rem;
+    line-height:1.6;
+    max-width:40ch;
+  }
+
+  .actions{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-top:8px;
+    width:100%;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:13px 28px;
+    border-radius:30px;
+    font-weight:600;
+    font-size:0.92rem;
+    border:none;
+    cursor:pointer;
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+    font-family:inherit;
+
+  }
+  .btn svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; }
+  .btn-primary{
+    background:var(--gold);
+    color:var(--teal-dark);
+    text-decoration: none;
+  }
+  .btn-primary:hover{ box-shadow:0 10px 24px rgba(217,164,65,.35); }
+  .btn-outline{
+    background:transparent;
+    color:var(--teal);
+    border:1.5px solid var(--line);
+  }
+  .btn-outline:hover{ border-color:var(--teal); background:rgba(12,110,106,0.06); }
+
+  @media (max-width:420px){
+    .actions{ flex-direction:column; }
+    .btn{ width:100%; justify-content:center; }
+  }
+
+  /* ============ PRELOADER (simple) ============ */
+  .preloader{
+    position:fixed; inset:0; z-index:9999;
+    background:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity .5s ease;
+  }
+  .preloader.hide{ opacity:0; pointer-events:none; }
+  .preloader img{ height:42px; width:auto; border-radius:8px; animation:preloaderPulse 1.3s ease-in-out infinite; }
+  @keyframes preloaderPulse{ 0%,100%{ opacity:.45; transform:scale(.94); } 50%{ opacity:1; transform:scale(1); } }
+  @media (prefers-reduced-motion: reduce){ .preloader img{ animation:none; } .preloader{ transition:none; } }
+</style>
+</head>
+<body>
+<div class="preloader" id="preloader" role="status" aria-live="polite" aria-label="Loading">
+  <img src="stackly-logo.webp" alt="">
+</div>
+
+<div class="wrap">
+  <img class="logo" src="./assets/404 logo.webp" alt="Stackly Aqua Academy">
+
+  <svg class="wave" viewBox="0 0 90 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M2 20c6-8 12-8 18 0s12 8 18 0 12-8 18 0 12 8 18 0 12-8 14-4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    <path d="M2 30c6-8 12-8 18 0s12 8 18 0 12-8 18 0 12 8 18 0 12-8 14-4" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity=".45"/>
+  </svg>
+
+  <div class="code">4<em>0</em>4</div>
+  <h1>We couldn't find this page</h1>
+  <p>The page you're looking for may have been moved, renamed, or doesn't exist. Let's get you back on course.</p>
+
+  <div class="actions">
+    <button type="button" class="btn btn-outline" id="goBackBtn">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Go Back
+    </button>
+    <a href="index.html" class="btn btn-primary">
+      <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+      Back to Home
+    </a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var pre = document.getElementById('preloader');
+  var start = Date.now();
+  var MIN_MS = 300;
+  function reveal(){
+    if(pre){
+      pre.classList.add('hide');
+      setTimeout(function(){ pre.style.display = 'none'; }, 550);
+    }
+  }
+  function onReady(){
+    var wait = Math.max(0, MIN_MS - (Date.now() - start));
+    setTimeout(reveal, wait);
+  }
+  if(document.readyState === 'complete'){ onReady(); }
+  else{ window.addEventListener('load', onReady); }
+})();
+
+  document.getElementById('goBackBtn').addEventListener('click', function(){
+    try{
+      var raw = sessionStorage.getItem('stackly_last_position');
+      if(raw){
+        var data = JSON.parse(raw);
+        if(data && data.path){
+          sessionStorage.setItem('stackly_restore_scroll', raw);
+          window.location.href = data.path;
+          return;
+        }
+      }
+    }catch(e){}
+
+    if(document.referrer && document.referrer.indexOf(window.location.host) !== -1 && window.history.length > 1){
+      window.history.back();
+    } else {
+      window.location.href = 'index.html';
+    }
+  });
+</script>
+</body>
+</html>

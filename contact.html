@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | Stackly Aqua Academy</title>
+<meta name="description" content="Contact Stackly Aqua Academy to book a free trial swim class, ask about batch timings, or enquire about our programs in Salem, Tamil Nadu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gutter:64px;
+    --teal:#0c6e6a;
+    --teal-dark:#084d4a;
+    --teal-light:#12908a;
+    --cream:#faf3e6;
+    --cream-2:#f2e6d0;
+    --sand:#e8d9b8;
+    --coral:#ff7a59;
+    --gold:#d9a441;
+    --ink:#1c2b2a;
+    --white:#ffffff;
+    --red:#c0392b;
+    --shadow: 0 20px 45px rgba(12,110,106,0.15);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Poppins',Arial,sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    overflow-x:hidden;
+    opacity:0;
+    transition:opacity .6s ease;
+  }
+  body.loaded{opacity:1;}
+  a, button, .icon-circle, .btn-primary, .btn-outline, .btn-login{
+    transition:all .3s cubic-bezier(.25,.8,.25,1);
+  }
+  h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif;}
+  img{max-width:100%;display:block;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  .container{max-width:1600px;margin:0 auto;padding:0 var(--gutter);}
+
+  /* ===== Header ===== */
+  header{
+    position:fixed;top:0;left:0;width:100%;
+    background:var(--teal);
+    z-index:1000;
+    box-shadow:0 4px 20px rgba(0,0,0,0.12);
+    transition:background .3s ease;
+  }
+  .header-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px var(--gutter);max-width:1600px;margin:0 auto;
+  }
+  .logo-wrap{display:flex;align-items:center;gap:10px;}
+  .logo-wrap img{height:52px;width:auto;}
+  .logo-wrap span{
+    color:var(--white);font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;letter-spacing:.5px;
+  }
+  nav.primary-nav{display:flex;align-items:center;gap:30px;}
+  nav.primary-nav a{
+    color:var(--cream);font-weight:500;font-size:.95rem;position:relative;padding:6px 2px;
+    transition:color .25s ease;
+  }
+  nav.primary-nav a::after{
+    content:'';position:absolute;left:0;bottom:-2px;width:0;height:2px;background:var(--gold);
+    transition:width .3s ease;
+  }
+  nav.primary-nav a:hover{color:var(--gold);}
+  nav.primary-nav a:hover::after{width:100%;}
+  nav.primary-nav a.active{color:var(--gold);}
+  nav.primary-nav a.active::after{width:100%;}
+  .header-actions{display:flex;align-items:center;gap:18px;}
+  .btn-login{
+    background:var(--gold);color:var(--teal-dark);font-weight:600;
+    padding:10px 26px;border-radius:30px;font-size:.9rem;
+    transition:transform .25s ease, box-shadow .25s ease;
+    border:none;cursor:pointer;display:inline-block;
+  }
+  .btn-login:hover{box-shadow:0 8px 20px rgba(217,164,65,0.4);}
+  .hamburger{
+    display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:1100;
+    width:32px;
+  }
+  .hamburger span{
+    display:block;height:3px;width:100%;background:var(--white);border-radius:3px;
+    transition:all .3s ease;
+  }
+
+  /* ===== Mobile Menu ===== */
+  .mobile-menu{
+    position:fixed;top:0;right:-100%;width:78%;max-width:340px;height:100vh;
+    background:var(--teal-dark);z-index:1050;
+    padding:30px 26px;
+    transition:right .4s cubic-bezier(.77,0,.18,1);
+    display:flex;flex-direction:column;
+    box-shadow:-10px 0 40px rgba(0,0,0,.25);
+    overflow-y:auto;
+  }
+  .mobile-menu.open{right:0;}
+  .mobile-menu .exit-btn{
+    align-self:flex-end;background:rgba(255,255,255,0.12);border:none;color:var(--white);
+    width:40px;height:40px;border-radius:50%;font-size:1.3rem;cursor:pointer;margin-bottom:30px;
+    transition:background .25s ease, transform .25s ease;
+  }
+  .mobile-menu .exit-btn:hover{background:var(--coral);transform:rotate(90deg);}
+  .mobile-menu a{
+    color:var(--cream);font-size:1.15rem;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.08);
+    font-weight:500;
+  }
+  .mobile-menu a.active{color:var(--gold);}
+  .mobile-menu .btn-login{margin-top:24px;text-align:center;display:block;}
+  .overlay{
+    position:fixed;inset:0;background:rgba(8,20,19,0.55);z-index:1040;
+    opacity:0;visibility:hidden;transition:opacity .35s ease, visibility .35s ease;
+  }
+  .overlay.show{opacity:1;visibility:visible;}
+
+  /* ===== Page banner (inner pages) ===== */
+  .page-banner{
+    position:relative;padding:180px 0 90px;background:var(--teal-dark);color:var(--white);overflow:hidden;
+  }
+  .page-banner-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.28;}
+  .page-banner::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(8,20,19,.55), rgba(8,20,19,.88));}
+  .page-banner .container{position:relative;z-index:1;text-align:center;}
+  .page-banner .crumbs{
+    font-size:.82rem;color:var(--cream-2);letter-spacing:.5px;margin-bottom:14px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .page-banner .crumbs a{color:var(--gold);font-weight:600;}
+  .page-banner h1{font-size:2.8rem;margin-bottom:12px;}
+  .page-banner p{color:var(--cream-2);max-width:560px;margin:0 auto;line-height:1.7;}
+
+  /* ===== Buttons ===== */
+  .btn-primary{
+    background:var(--teal);color:var(--white);padding:15px 34px;border-radius:32px;
+    font-weight:600;font-size:.95rem;box-shadow:0 14px 30px rgba(12,110,106,0.28);
+    transition:transform .25s ease, background .25s ease;
+    display:inline-block;border:none;cursor:pointer;
+  }
+  .btn-primary:hover{background:var(--teal-dark);}
+  .btn-outline{
+    border:2px solid var(--teal);color:var(--teal);padding:13px 30px;border-radius:32px;
+    font-weight:600;font-size:.95rem;transition:all .25s ease;display:inline-block;background:none;cursor:pointer;
+  }
+  .btn-outline:hover{background:var(--teal);color:var(--white);}
+
+  /* ===== Section shared ===== */
+  section{padding:100px 0;}
+  .section-head{text-align:center;max-width:640px;margin:0 auto 60px;}
+  .section-head.left{text-align:left;margin:0 0 40px;}
+  .section-tag{
+    color:var(--coral);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:.8rem;
+    margin-bottom:12px;display:block;
+  }
+  .section-head h2{font-size:2.4rem;color:var(--ink);}
+  .section-head p{color:#5c6b6a;margin-top:14px;line-height:1.7;}
+
+  /* ===== Why Us / Feature cards ===== */
+  .why-us{background:var(--white);}
+  .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;}
+  .why-card{
+    background:var(--cream);padding:36px 28px;border-radius:22px;text-align:center;
+    transition:transform .35s ease, box-shadow .35s ease;
+  }
+  .why-card:hover{transform:translateY(-10px);box-shadow:var(--shadow);}
+  .why-card .icon-circle{
+    width:66px;height:66px;border-radius:50%;background:var(--teal);color:var(--white);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:1.6rem;
+    transition:transform .4s ease, background .4s ease;
+  }
+  .why-card:hover .icon-circle{transform:scale(1.12) rotate(-6deg);background:var(--coral);}
+  .why-card h4{margin-bottom:10px;font-size:1.1rem;}
+  .why-card p{font-size:.88rem;color:#63706f;line-height:1.6;}
+
+  /* ===== Programs / cards ===== */
+  .programs{background:var(--cream-2);}
+  .program-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;}
+  .program-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+  .program-card{
+    background:var(--white);border-radius:22px;overflow:hidden;box-shadow:0 10px 28px rgba(12,110,106,0.08);
+    transition:transform .35s ease, box-shadow .35s ease;position:relative;
+  }
+  .program-card:hover{transform:translateY(-8px);box-shadow:var(--shadow);}
+  .program-card .img-wrap{height:180px;overflow:hidden;}
+  .program-card .img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .program-card:hover .img-wrap img{transform:scale(1.1);}
+  .program-card .content{padding:22px;}
+  .program-card .badge{
+    display:inline-block;background:var(--cream-2);color:var(--teal-dark);
+    font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:10px;
+  }
+  .program-card h4{font-size:1.1rem;margin-bottom:8px;}
+  .program-card p{font-size:.86rem;color:#63706f;margin-bottom:14px;line-height:1.6;}
+  .program-card .link{color:var(--teal);font-weight:600;font-size:.88rem;}
+  .program-card .meta-row{display:flex;gap:14px;margin-bottom:12px;flex-wrap:wrap;}
+  .program-card .meta-row span{font-size:.76rem;color:var(--teal-dark);font-weight:600;background:var(--cream);padding:4px 10px;border-radius:14px;}
+
+  /* ===== About / Split ===== */
+  .about-split{background:var(--white);}
+  .split-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:60px;align-items:center;}
+  .split-grid.reverse{grid-template-columns:1.05fr .95fr;}
+  .split-grid.reverse .split-imgs{order:2;}
+  .split-imgs{position:relative;}
+  .split-imgs img{border-radius:22px;box-shadow:var(--shadow);}
+  .split-imgs .img-big{width:80%;}
+  .split-imgs .img-small{
+    width:55%;position:absolute;bottom:-40px;right:-10px;border:6px solid var(--cream);
+  }
+  .split-grid.reverse .split-imgs .img-small{right:auto;left:-10px;}
+  .split-text .section-tag{margin-bottom:12px;}
+  .split-text h2{font-size:2.2rem;margin-bottom:18px;}
+  .split-text p{color:#5c6b6a;line-height:1.8;margin-bottom:24px;}
+  .check-list{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:30px;}
+  .check-list li{display:flex;align-items:center;gap:10px;font-size:.92rem;color:#3d4d4c;font-weight:500;}
+  .check-list li .tick{
+    width:24px;height:24px;border-radius:50%;background:var(--teal);color:var(--white);
+    display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;
+  }
+
+  /* ===== Coaches ===== */
+  .coaches{background:var(--cream);}
+  .coach-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;}
+  .coach-card{text-align:center;}
+  .coach-card .photo{
+    border-radius:22px;overflow:hidden;margin-bottom:18px;position:relative;box-shadow:0 10px 24px rgba(12,110,106,0.1);
+  }
+  .coach-card .photo img{height:280px;object-fit:cover;width:100%;transition:transform .5s ease;}
+  .coach-card:hover .photo img{transform:scale(1.08);}
+  .coach-card h4{font-size:1.05rem;margin-bottom:4px;}
+  .coach-card span{font-size:.82rem;color:var(--coral);font-weight:600;}
+  .coach-card .bio{font-size:.82rem;color:#63706f;margin-top:8px;line-height:1.6;}
+
+  /* ===== Gallery / Facilities ===== */
+  .facilities{background:var(--teal);color:var(--white);position:relative;overflow:hidden;}
+  .facilities .section-head h2, .facilities .section-head p{color:var(--white);}
+  .facilities .section-tag{color:var(--gold);}
+  .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:170px;gap:18px;}
+  .gallery-grid .g-item{border-radius:18px;overflow:hidden;}
+  .gallery-grid .g-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .gallery-grid .g-item:hover img{transform:scale(1.12);}
+  .gallery-grid .g-item.tall{grid-row:span 2;}
+
+  /* ===== Stats strip ===== */
+  .stats-strip{background:var(--teal-dark);color:var(--white);padding:56px 0;}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;}
+  .stats-grid div h3{font-size:2.2rem;color:var(--gold);}
+  .stats-grid div span{font-size:.85rem;color:var(--cream-2);}
+
+  /* ===== CTA banner ===== */
+  .cta-banner{
+    background:linear-gradient(120deg,var(--gold),#e8b85c);
+    border-radius:30px;padding:60px;display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:24px;max-width:1600px;margin:0 auto;
+    box-shadow:0 30px 60px rgba(217,164,65,0.35);
+  }
+  .cta-banner h2{font-size:2rem;color:var(--teal-dark);max-width:480px;}
+  .cta-banner .btn-primary{background:var(--teal-dark);}
+
+  /* ===== Testimonials ===== */
+  .testimonials{background:var(--white);}
+  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .testi-card{
+    background:var(--cream);padding:32px;border-radius:22px;position:relative;
+  }
+  .testi-card .quote-mark{font-size:3rem;color:var(--teal-light);font-family:'Playfair Display',serif;line-height:.5;margin-bottom:14px;display:block;}
+  .testi-card p{color:#4a5c5b;line-height:1.7;margin-bottom:20px;font-size:.93rem;}
+  .testi-user{display:flex;align-items:center;gap:12px;}
+  .testi-user img{width:46px;height:46px;border-radius:50%;object-fit:cover;}
+  .testi-user strong{display:block;font-size:.9rem;}
+  .testi-user span{font-size:.78rem;color:#6b7a79;}
+
+  /* ===== Blog cards ===== */
+  .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;}
+  .blog-card{background:var(--white);border-radius:22px;overflow:hidden;box-shadow:0 10px 28px rgba(12,110,106,0.08);transition:transform .35s ease, box-shadow .35s ease;}
+  .blog-card:hover{transform:translateY(-8px);box-shadow:var(--shadow);}
+  .blog-card .img-wrap{height:210px;overflow:hidden;}
+  .blog-card .img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .blog-card:hover .img-wrap img{transform:scale(1.1);}
+  .blog-card .content{padding:24px;}
+  .blog-card .meta{display:flex;gap:14px;font-size:.75rem;color:var(--coral);font-weight:600;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
+  .blog-card h4{font-size:1.15rem;margin-bottom:10px;line-height:1.4;}
+  .blog-card p{font-size:.87rem;color:#63706f;line-height:1.65;margin-bottom:16px;}
+  .blog-card .link{color:var(--teal);font-weight:600;font-size:.88rem;}
+  .blog-featured{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;background:var(--white);border-radius:26px;padding:36px;box-shadow:var(--shadow);margin-bottom:60px;}
+  .blog-featured .img-wrap{border-radius:20px;overflow:hidden;height:340px;}
+  .blog-featured .img-wrap img{width:100%;height:100%;object-fit:cover;}
+
+  /* ===== Form fields (contact / forms) ===== */
+  .field-group{margin-bottom:20px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .field-group label{display:block;font-size:.82rem;font-weight:600;color:var(--teal-dark);margin-bottom:8px;letter-spacing:.3px;}
+  .field-group input, .field-group textarea, .field-group select{
+    width:100%;padding:14px 16px;border:1.5px solid #dcd2ba;border-radius:10px;background:var(--white);
+    font-family:'Poppins',Arial,sans-serif;font-size:.94rem;color:var(--ink);transition:border-color .25s;
+  }
+  .field-group input:focus, .field-group textarea:focus, .field-group select:focus{outline:none;border-color:var(--teal);}
+  .field-group.invalid input, .field-group.invalid textarea, .field-group.invalid select{border-color:var(--red);}
+  .field-group .error-msg{display:none;font-size:.78rem;color:var(--red);margin-top:7px;font-weight:500;}
+  .field-group.invalid .error-msg{display:block;}
+  .field-group textarea{resize:vertical;min-height:130px;}
+  .form-alert{
+    display:none;align-items:flex-start;gap:10px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.28);
+    color:var(--red);padding:13px 16px;border-radius:10px;font-size:.85rem;margin-bottom:20px;
+  }
+  .form-alert.show{display:flex;}
+  .form-alert.ok{background:rgba(12,110,106,0.08);border-color:rgba(12,110,106,0.28);color:var(--teal-dark);}
+
+  /* ===== Reveal animation base ===== */
+  .reveal{opacity:0;transform:translateY(40px);}
+
+  /* ===== Footer ===== */
+  footer{background:var(--teal-dark);color:var(--cream);padding:80px 0 0;}
+  .footer-grid{
+    display:grid;grid-template-columns:1.3fr 1fr 1fr 1.2fr;gap:40px;padding-bottom:50px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .footer-col .logo-wrap img{height:50px;}
+  .footer-col .logo-wrap span{color:var(--white);font-size:1.2rem;}
+  .footer-col p.desc{margin-top:16px;font-size:.88rem;line-height:1.75;color:#bcd3d1;max-width:280px;}
+  .social-row{display:flex;gap:12px;margin-top:22px;}
+  .social-row a{
+    width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.08);
+    display:flex;align-items:center;justify-content:center;transition:all .3s ease;
+  }
+  .social-row a:hover{background:var(--gold);transform:translateY(-4px);}
+  .social-row svg{width:18px;height:18px;fill:var(--cream);}
+  .social-row a:hover svg{fill:var(--teal-dark);}
+  .footer-col h4{color:var(--white);font-size:1.02rem;margin-bottom:20px;}
+  .footer-col ul li{margin-bottom:12px;}
+  .footer-col ul li a{font-size:.88rem;color:#bcd3d1;transition:color .25s ease, padding-left .25s ease;}
+  .footer-col ul li a:hover{color:var(--gold);padding-left:6px;}
+  .footer-col .address-block{font-size:.88rem;color:#bcd3d1;line-height:1.8;}
+  .footer-col .address-block .row{display:flex;gap:10px;margin-bottom:14px;align-items:flex-start;}
+  .footer-col .address-block svg{width:18px;height:18px;fill:var(--gold);flex-shrink:0;margin-top:2px;}
+  .footer-bottom{
+    display:flex;justify-content:space-between;align-items:center;padding:26px 0;
+    font-size:.82rem;color:#8fadab;flex-wrap:wrap;gap:10px;
+  }
+  .footer-legal{display:flex;gap:10px;align-items:center;}
+  .footer-legal a{font-size:.82rem;color:#8fadab;transition:color .25s ease;}
+  .footer-legal a:hover{color:var(--gold);}
+  .footer-legal .dot{color:#8fadab;}
+
+  /* ===== Responsive ===== */
+  @media(max-width:1024px){
+    :root{--gutter:36px;}
+    .why-grid{grid-template-columns:repeat(2,1fr);}
+    .program-grid{grid-template-columns:repeat(2,1fr);}
+    .program-grid.cols-3{grid-template-columns:repeat(2,1fr);}
+    .coach-grid{grid-template-columns:repeat(2,1fr);}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .testi-grid{grid-template-columns:1fr;}
+    .blog-grid{grid-template-columns:repeat(2,1fr);}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+    .stats-grid{grid-template-columns:repeat(2,1fr);gap:32px;}
+    .blog-featured{grid-template-columns:1fr;}
+  }
+  @media(max-width:768px){
+    :root{--gutter:22px;}
+    nav.primary-nav{display:none;}
+    .header-actions .btn-login{display:none;}
+    .hamburger{display:flex;}
+    .why-grid{grid-template-columns:1fr;}
+    .program-grid, .program-grid.cols-3{grid-template-columns:1fr;}
+    .coach-grid{grid-template-columns:1fr;max-width:340px;margin:0 auto;}
+    .coach-card .photo img{height:320px;}
+    .gallery-grid{grid-template-columns:1fr;grid-auto-rows:220px;}
+    .gallery-grid .g-item.tall{grid-row:span 1;}
+    .check-list{grid-template-columns:1fr;}
+    .split-grid, .split-grid.reverse{grid-template-columns:1fr;}
+    .split-grid.reverse .split-imgs{order:0;}
+    .split-imgs .img-small{position:static;width:60%;margin-top:-40px;margin-left:auto;}
+    .split-grid.reverse .split-imgs .img-small{margin-left:0;margin-right:auto;}
+    .cta-banner{flex-direction:column;text-align:center;padding:40px 26px;}
+    .cta-banner h2{max-width:100%;}
+    .footer-grid{grid-template-columns:1fr;}
+    .blog-grid{grid-template-columns:1fr;}
+    .field-row{grid-template-columns:1fr;}
+    .stats-grid{grid-template-columns:1fr 1fr;}
+    .page-banner{padding:150px 0 70px;}
+    .page-banner h1{font-size:2rem;}
+    section{padding:70px 0;}
+  }
+</style>
+
+<style>
+  /* ============ PRELOADER (simple) ============ */
+  .preloader{
+    position:fixed; inset:0; z-index:9999;
+    background:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity .5s ease;
+  }
+  .preloader.hide{ opacity:0; pointer-events:none; }
+  .preloader img{ height:42px; width:auto; border-radius:8px; animation:preloaderPulse 1.3s ease-in-out infinite; }
+  @keyframes preloaderPulse{ 0%,100%{ opacity:.45; transform:scale(.94); } 50%{ opacity:1; transform:scale(1); } }
+  @media (prefers-reduced-motion: reduce){ .preloader img{ animation:none; } .preloader{ transition:none; } }
+</style>
+</head>
+<body>
+<div class="preloader" id="preloader" role="status" aria-live="polite" aria-label="Loading">
+  <img src="stackly-logo.webp" alt="">
+</div>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo-wrap">
+      <img src="stackly-logo.webp" alt="Stackly Aqua Academy logo">
+    </a>
+    <nav class="primary-nav">
+      <a href="index.html" class="">Home</a>
+      <a href="about.html" class="">About</a>
+      <a href="services.html" class="">Services</a>
+      <a href="programs.html" class="">Programs</a>
+      <a href="blogs.html" class="">Blogs</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a href="login.html" class="btn-login">Login</a>
+      <div class="hamburger" id="hamburgerBtn">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="overlay" id="overlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="exit-btn" id="exitBtn">&times;</button>
+  <a href="index.html" class="">Home</a>
+  <a href="about.html" class="">About</a>
+  <a href="services.html" class="">Services</a>
+  <a href="programs.html" class="">Programs</a>
+  <a href="blogs.html" class="">Blogs</a>
+  <a href="contact.html" class="active">Contact</a>
+  <a href="login.html" class="btn-login">Login</a>
+</div>
+<!-- ===== PAGE BANNER ===== -->
+<section class="page-banner">
+  <div class="page-banner-bg" style="background-image:url('./assets/i1.webp');"></div>
+  <div class="container">
+    <div class="crumbs"><a href="index.html">Home</a> / Contact</div>
+    <h1>Get In Touch</h1>
+    <p>Questions about a program, batch timing or your free trial class? We usually reply within a few hours.</p>
+  </div>
+</section>
+
+<!-- ===== CONTACT INFO CARDS ===== -->
+<section class="why-us" style="padding-bottom:0;">
+  <div class="container">
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="icon-circle">📍</div>
+        <h4>Visit The Academy</h4>
+        <p>MMR Complex, Periyakollappatty, Chinna Thirupathi, Salem, Tamil Nadu 636008</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon-circle">📞</div>
+        <h4>Call Us</h4>
+        <p>+91 98765 43210<br>Mon–Sat, 6 AM – 8 PM</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon-circle">✉️</div>
+        <h4>Email Us</h4>
+        <p>hello@stacklyaqua.com<br>We reply within 24 hours</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon-circle">🏊</div>
+        <h4>Free Trial Class</h4>
+        <p>Fill the form and mention your preferred program — we'll confirm a free trial slot.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FORM + MAP ===== -->
+<section class="about-split">
+  <div class="container split-grid">
+    <div class="reveal">
+      <span class="section-tag">Send A Message</span>
+      <h2 style="font-size:2.2rem;margin-bottom:22px;">Book A Free Trial Or Ask A Question</h2>
+
+      <div id="contactAlert" class="form-alert">
+        <span id="contactAlertText">Please correct the highlighted fields below.</span>
+      </div>
+      <div id="contactSuccess" class="form-alert ok">
+        <span>Thanks! Your message has been sent — we'll get back to you shortly.</span>
+      </div>
+
+      <form id="contactForm" novalidate>
+        <div class="field-row">
+          <div class="field-group" id="fg-cfname">
+            <label for="cFirstName">First Name</label>
+            <input type="text" id="cFirstName" placeholder="First name" autocomplete="given-name">
+            <span class="error-msg">Letters only — no spaces, numbers or symbols.</span>
+          </div>
+          <div class="field-group" id="fg-clname">
+            <label for="cLastName">Last Name</label>
+            <input type="text" id="cLastName" placeholder="Last name" autocomplete="family-name">
+            <span class="error-msg">Letters only — no spaces, numbers or symbols.</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group" id="fg-cemail">
+            <label for="cEmail">Email Address</label>
+            <input type="email" id="cEmail" placeholder="you@email.com" autocomplete="email">
+            <span class="error-msg">Enter a valid email address with no spaces.</span>
+          </div>
+          <div class="field-group" id="fg-cphone">
+            <label for="cPhone">Mobile Number</label>
+            <input type="tel" id="cPhone" placeholder="10-digit mobile number" autocomplete="tel" inputmode="numeric">
+            <span class="error-msg">Enter a valid 10-digit mobile number — digits only, no spaces.</span>
+          </div>
+        </div>
+        <div class="field-group" id="fg-cprogram">
+          <label for="cProgram">Program Of Interest</label>
+          <select id="cProgram">
+            <option value="">Select a program</option>
+            <option>Little Splashers (Ages 4–12)</option>
+            <option>Adult Learn-to-Swim</option>
+            <option>Competitive Squad</option>
+            <option>Aqua Fitness</option>
+            <option>Parent & Toddler</option>
+            <option>Private Coaching</option>
+            <option>General Enquiry</option>
+          </select>
+          <span class="error-msg">Please select a program.</span>
+        </div>
+        <div class="field-group" id="fg-cmessage">
+          <label for="cMessage">Message</label>
+          <textarea id="cMessage" placeholder="Tell us a bit about your swimmer and preferred batch timing..."></textarea>
+          <span class="error-msg">Please enter a message (minimum 10 characters).</span>
+        </div>
+        <button type="submit" class="btn-primary" id="contactSubmit" style="width:100%;">Send Message →</button>
+      </form>
+    </div>
+
+    <div class="reveal" style="border-radius:22px;overflow:hidden;box-shadow:var(--shadow);min-height:480px;">
+      <iframe title="Stackly Aqua Academy location map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3907.1616097152896!2d78.1739798!3d11.682956599999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babefef7fd970bb%3A0xe11aef1a71994f9!2sStackly!5e0!3m2!1sen!2sin!4v1790164097382!5m2!1sen!2sin" width="100%" height="100%" style="border:0;min-height:480px;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MINI FAQ ===== -->
+<section class="programs">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Before You Reach Out</span>
+      <h2>Quick Answers</h2>
+    </div>
+    <div class="program-grid cols-3">
+      <div class="program-card reveal">
+        <div class="content">
+          <h4>How fast will I hear back?</h4>
+          <p>We reply to every enquiry within 24 hours, usually much sooner during batch hours.</p>
+        </div>
+      </div>
+      <div class="program-card reveal">
+        <div class="content">
+          <h4>Can I visit before enrolling?</h4>
+          <p>Absolutely — drop by during any batch timing to watch a session and meet the coaches.</p>
+        </div>
+      </div>
+      <div class="program-card reveal">
+        <div class="content">
+          <h4>Is parking available?</h4>
+          <p>Yes, free parking is available at the MMR Complex for drop-off and pick-up.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col reveal">
+        <a href="index.html" class="logo-wrap">
+          <img src="stackly-logo.webp" alt="Stackly Aqua Academy logo">
+        </a>
+        <p class="desc">Stackly Aqua Academy is Salem's trusted swim school, offering certified coaching for kids, adults and competitive swimmers in safe, treated pools since 2013.</p>
+        <div class="social-row">
+          <a href="./404.html" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 2.1.26 2.8.55.8.31 1.4.72 2 1.33.6.6 1 1.2 1.3 2 .3.7.5 1.6.6 2.8.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 2.1-.6 2.8-.3.8-.7 1.4-1.3 2-.6.6-1.2 1-2 1.3-.7.3-1.6.5-2.8.6-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-2.1-.3-2.8-.6-.8-.3-1.4-.7-2-1.3-.6-.6-1-1.2-1.3-2-.3-.7-.5-1.6-.6-2.8C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-2.1.6-2.8.3-.8.7-1.4 1.3-2 .6-.6 1.2-1 2-1.3.7-.3 1.6-.5 2.8-.6C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.8.07-1 .05-1.6.22-2 .37-.5.19-.85.42-1.22.79-.37.37-.6.72-.79 1.22-.15.4-.32 1-.37 2C2.77 9.5 2.77 9.9 2.77 13s0 3.5.07 4.8c.05 1 .22 1.6.37 2 .19.5.42.85.79 1.22.37.37.72.6 1.22.79.4.15 1 .32 2 .37 1.3.07 1.7.07 4.8.07s3.5 0 4.8-.07c1-.05 1.6-.22 2-.37.5-.19.85-.42 1.22-.79.37-.37.6-.72.79-1.22.15-.4.32-1 .37-2 .07-1.3.07-1.7.07-4.8s0-3.5-.07-4.8c-.05-1-.22-1.6-.37-2-.19-.5-.42-.85-.79-1.22-.37-.37-.72-.6-1.22-.79-.4-.15-1-.32-2-.37-1.3-.07-1.7-.07-4.8-.07zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.8a3.2 3.2 0 100 6.4 3.2 3.2 0 000-6.4zm5.2-2a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg>
+          </a>
+          <a href="./404.html" aria-label="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M13.5 21v-7.9h2.65l.4-3.08h-3.05V8.06c0-.89.25-1.5 1.53-1.5h1.63V3.8c-.28-.04-1.25-.12-2.37-.12-2.35 0-3.96 1.43-3.96 4.06v2.26H7.67v3.08H10.3V21h3.2z"/></svg>
+          </a>
+          <a href="./404.html" aria-label="X / Twitter">
+            <svg viewBox="0 0 24 24"><path d="M18.9 3H21l-6.55 7.49L22.2 21h-6.03l-4.72-6.17L5.9 21H3.79l7-8L2 3h6.18l4.27 5.64L18.9 3zm-1.06 16.2h1.1L7.22 4.72H6.03L17.84 19.2z"/></svg>
+          </a>
+          <a href="./404.html" aria-label="YouTube">
+            <svg viewBox="0 0 24 24"><path d="M22 8.6s-.2-1.5-.8-2.2c-.8-.8-1.6-.8-2-.9C16.3 5.2 12 5.2 12 5.2h-.01s-4.3 0-7.2.3c-.4.1-1.2.1-2 .9-.6.7-.8 2.2-.8 2.2S1.8 10.3 1.8 12v1.4c0 1.7.2 3.4.2 3.4s.2 1.5.8 2.2c.8.8 1.85.78 2.32.87C6.7 20 12 20 12 20s4.3 0 7.2-.3c.4-.1 1.2-.1 2-.9.6-.7.8-2.2.8-2.2s.2-1.7.2-3.4V12c0-1.7-.2-3.4-.2-3.4zM9.8 15V9l5.6 3-5.6 3z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col reveal">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="./index.html">Home</a></li>
+          <li><a href="./about.html">About Us</a></li>
+          <li><a href="./services.html">Services</a></li>
+          <li><a href="./programs.html">Programs</a></li>
+          <li><a href="./blogs.html">Blogs</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col reveal">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="./404.html">Kids Swim Lessons</a></li>
+          <li><a href="./404.html">Adult Learn-to-Swim</a></li>
+          <li><a href="./404.html">Competitive Training</a></li>
+          <li><a href="./404.html">Aqua Fitness</a></li>
+          <li><a href="./404.html">Private Coaching</a></li>
+        </ul>
+      </div>
+      <div class="footer-col reveal">
+        <h4>Reach Us</h4>
+        <div class="address-block">
+          <div class="row">
+            <svg viewBox="0 0 24 24"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.4 7 12 8 12s8-6.6 8-12c0-4.4-3.6-8-8-8zm0 10.8a2.8 2.8 0 110-5.6 2.8 2.8 0 010 5.6z"/></svg>
+            <span>MMR Complex, Periyakollappatty, Chinna Thirupathi, Salem, Tamil Nadu 636008</span>
+          </div>
+          <div class="row">
+            <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C11.6 21 3 12.4 3 2c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+            <span>+91 98765 43210</span>
+          </div>
+          <div class="row">
+            <svg viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm2 2v.01L12 12l8-5.99V6H4zm16 2.24l-7.4 5.55a1 1 0 01-1.2 0L4 8.24V18h16V8.24z"/></svg>
+            <span>hello@stacklyaqua.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Stackly Aqua Academy. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="404.html">Privacy Policy</a>
+        <span class="dot">·</span>
+        <a href="404.html">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+(function(){
+  var htmlEl = document.documentElement;
+  var pre = document.getElementById('preloader');
+  var start = Date.now();
+  var MIN_MS = 350;
+  var PATH = (window.location.pathname.split('/').pop() || 'contact.html');
+
+  function restoreScroll(){
+    try{
+      var raw = sessionStorage.getItem('stackly_restore_scroll');
+      if(raw){
+        var data = JSON.parse(raw);
+        if(data && data.path === PATH){
+          sessionStorage.removeItem('stackly_restore_scroll');
+          if(typeof data.y === 'number'){
+            var prevBehavior = htmlEl.style.scrollBehavior;
+            htmlEl.style.scrollBehavior = 'auto';
+            window.scrollTo(0, data.y);
+            void htmlEl.offsetHeight;
+            htmlEl.style.scrollBehavior = prevBehavior || '';
+          }
+        }
+      }
+    }catch(e){}
+  }
+
+  function reveal(){
+    restoreScroll();
+    document.body.classList.add('loaded');
+    if(pre){
+      pre.classList.add('hide');
+      setTimeout(function(){ pre.style.display = 'none'; }, 550);
+    }
+  }
+  function onReady(){
+    var wait = Math.max(0, MIN_MS - (Date.now() - start));
+    setTimeout(reveal, wait);
+  }
+  if(document.readyState === 'complete'){ onReady(); }
+  else{ window.addEventListener('load', onReady); }
+
+  /* remember exactly where on the page we were, so a 404 page's "Go Back" returns here */
+  window.addEventListener('beforeunload', function(){
+    try{ sessionStorage.setItem('stackly_last_position', JSON.stringify({ path: PATH, y: window.scrollY || window.pageYOffset || 0 })); }catch(e){}
+  });
+})();
+
+/* Scroll reveals */
+document.querySelectorAll('.reveal').forEach((el)=>{
+  gsap.to(el, {
+    opacity:1, y:0, duration:.9, ease:'power3.out',
+    scrollTrigger:{trigger:el, start:'top 88%'}
+  });
+});
+
+/* Stagger footer columns as a group */
+gsap.to('.footer-col.reveal', {
+  opacity:1, y:0, duration:.8, ease:'power3.out', stagger:.12,
+  scrollTrigger:{trigger:'.footer-grid', start:'top 92%'}
+});
+
+/* Counter animation (used on pages with .counter elements) */
+document.querySelectorAll('.counter').forEach((counter)=>{
+  const target = +counter.getAttribute('data-target');
+  ScrollTrigger.create({
+    trigger: counter,
+    start: 'top 90%',
+    once: true,
+    onEnter: ()=>{
+      gsap.to(counter, {
+        innerText: target, duration: 1.8, snap:{innerText:1}, ease:'power2.out',
+        onUpdate: function(){ counter.innerText = Math.floor(counter.innerText); }
+      });
+    }
+  });
+});
+
+/* Hamburger menu */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const exitBtn = document.getElementById('exitBtn');
+const overlay = document.getElementById('overlay');
+
+function openMenu(){
+  mobileMenu.classList.add('open');
+  overlay.classList.add('show');
+  hamburgerBtn.classList.add('active');
+}
+function closeMenu(){
+  mobileMenu.classList.remove('open');
+  overlay.classList.remove('show');
+  hamburgerBtn.classList.remove('active');
+}
+hamburgerBtn.addEventListener('click', openMenu);
+exitBtn.addEventListener('click', closeMenu);
+overlay.addEventListener('click', closeMenu);
+document.querySelectorAll('.mobile-menu a').forEach(link=>{
+  link.addEventListener('click', closeMenu);
+});
+
+/* Header background shift on scroll */
+window.addEventListener('scroll', ()=>{
+  const header = document.querySelector('header');
+  if(window.scrollY > 60){
+    header.style.boxShadow = '0 6px 26px rgba(0,0,0,0.2)';
+  } else {
+    header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.12)';
+  }
+});
+</script>
+<script>
+/* ===== Strict field validation helpers ===== */
+function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+function isPhone(v){ return /^[6-9][0-9]{9}$/.test(v); }
+function setFieldInvalid(id, invalid){
+  var el = document.getElementById(id);
+  if(el) el.classList.toggle('invalid', invalid);
+}
+/* Name fields: letters only, no digits, no spaces, no symbols */
+function attachNameOnly(input){
+  if(!input) return;
+  input.addEventListener('input', function(){
+    var cleaned = input.value.replace(/[^A-Za-z]/g, '');
+    if(cleaned !== input.value) input.value = cleaned;
+  });
+  input.addEventListener('keypress', function(e){
+    if(e.key.length === 1 && !/[A-Za-z]/.test(e.key)) e.preventDefault();
+  });
+  input.addEventListener('paste', function(e){
+    e.preventDefault();
+    var text = (e.clipboardData || window.clipboardData).getData('text').replace(/[^A-Za-z]/g,'');
+    document.execCommand('insertText', false, text);
+  });
+}
+/* Mobile number: digits only, no letters, no spaces, capped at 10 */
+function attachDigitsOnly(input, maxLen){
+  if(!input) return;
+  input.addEventListener('input', function(){
+    var cleaned = input.value.replace(/[^0-9]/g, '').slice(0, maxLen || 10);
+    if(cleaned !== input.value) input.value = cleaned;
+  });
+  input.addEventListener('keypress', function(e){
+    if(e.key.length === 1 && !/[0-9]/.test(e.key)) e.preventDefault();
+  });
+}
+/* Email: no spaces allowed while typing */
+function attachNoSpace(input){
+  if(!input) return;
+  input.addEventListener('input', function(){
+    if(/\s/.test(input.value)) input.value = input.value.replace(/\s/g, '');
+  });
+  input.addEventListener('keypress', function(e){
+    if(e.key === ' ') e.preventDefault();
+  });
+}
+/* Generic text field (subject/city etc.): block digits, allow letters/spaces/punctuation */
+function attachTextOnly(input){
+  if(!input) return;
+  input.addEventListener('input', function(){
+    var cleaned = input.value.replace(/[0-9]/g, '');
+    if(cleaned !== input.value) input.value = cleaned;
+  });
+  input.addEventListener('keypress', function(e){
+    if(e.key.length === 1 && /[0-9]/.test(e.key)) e.preventDefault();
+  });
+}
+</script>
+<script>
+(function(){
+  attachNameOnly(document.getElementById('cFirstName'));
+  attachNameOnly(document.getElementById('cLastName'));
+  attachNoSpace(document.getElementById('cEmail'));
+  attachDigitsOnly(document.getElementById('cPhone'), 10);
+
+  var form = document.getElementById('contactForm');
+  var alertBox = document.getElementById('contactAlert');
+  var successBox = document.getElementById('contactSuccess');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var fn = document.getElementById('cFirstName').value.trim();
+    var ln = document.getElementById('cLastName').value.trim();
+    var email = document.getElementById('cEmail').value.trim();
+    var phone = document.getElementById('cPhone').value.trim();
+    var program = document.getElementById('cProgram').value;
+    var message = document.getElementById('cMessage').value.trim();
+
+    var ok = true;
+    if(!fn){ setFieldInvalid('fg-cfname', true); ok = false; } else setFieldInvalid('fg-cfname', false);
+    if(!ln){ setFieldInvalid('fg-clname', true); ok = false; } else setFieldInvalid('fg-clname', false);
+    if(!isEmail(email)){ setFieldInvalid('fg-cemail', true); ok = false; } else setFieldInvalid('fg-cemail', false);
+    if(!isPhone(phone)){ setFieldInvalid('fg-cphone', true); ok = false; } else setFieldInvalid('fg-cphone', false);
+    if(!program){ setFieldInvalid('fg-cprogram', true); ok = false; } else setFieldInvalid('fg-cprogram', false);
+    if(message.length < 10){ setFieldInvalid('fg-cmessage', true); ok = false; } else setFieldInvalid('fg-cmessage', false);
+
+    if(!ok){
+      alertBox.classList.add('show');
+      successBox.classList.remove('show');
+      return;
+    }
+    alertBox.classList.remove('show');
+    successBox.classList.add('show');
+    form.reset();
+    try{
+      sessionStorage.setItem('stackly_last_position', JSON.stringify({ path:'contact.html', y: window.scrollY || window.pageYOffset || 0 }));
+    }catch(err){}
+    window.location.href = '404.html';
+  });
+})();
+</script>
+</body>
+</html>

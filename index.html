@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stackly Aqua Academy | Swimming Lessons & Training</title>
+<style>
+  :root{
+    --gutter:64px;
+    --teal:#0c6e6a;
+    --teal-dark:#084d4a;
+    --teal-light:#12908a;
+    --cream:#faf3e6;
+    --cream-2:#f2e6d0;
+    --sand:#e8d9b8;
+    --coral:#ff7a59;
+    --gold:#d9a441;
+    --ink:#1c2b2a;
+    --white:#ffffff;
+    --shadow: 0 20px 45px rgba(12,110,106,0.15);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Poppins',Arial,sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    overflow-x:hidden;
+    opacity:0;
+    transition:opacity .6s ease;
+  }
+  body.loaded{opacity:1;}
+  a, button, .icon-circle, .btn-primary, .btn-outline, .btn-login{
+    transition:all .3s cubic-bezier(.25,.8,.25,1);
+  }
+  @font-face{
+    font-family:'Poppins';
+    src:local('Poppins');
+  }
+  h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif;}
+  img{max-width:100%;display:block;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  .container{max-width:1600px;margin:0 auto;padding:0 var(--gutter);}
+  .wave-divider{width:100%;display:block;line-height:0;}
+  .wave-divider svg{width:100%;height:60px;display:block;}
+
+  /* ===== Header ===== */
+  header{
+    position:fixed;top:0;left:0;width:100%;
+    background:var(--teal);
+    z-index:1000;
+    box-shadow:0 4px 20px rgba(0,0,0,0.12);
+    transition:background .3s ease;
+  }
+  .header-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px var(--gutter);max-width:1600px;margin:0 auto;
+  }
+  .logo-wrap{display:flex;align-items:center;gap:10px;}
+  .logo-wrap img{height:52px;width:auto;}
+  .logo-wrap span{
+    color:var(--white);font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;letter-spacing:.5px;
+  }
+  nav.primary-nav{display:flex;align-items:center;gap:34px;}
+  nav.primary-nav a{
+    color:var(--cream);font-weight:500;font-size:.95rem;position:relative;padding:6px 2px;
+    transition:color .25s ease;
+  }
+  nav.primary-nav a::after{
+    content:'';position:absolute;left:0;bottom:-2px;width:0;height:2px;background:var(--gold);
+    transition:width .3s ease;
+  }
+  nav.primary-nav a:hover{color:var(--gold);}
+  nav.primary-nav a:hover::after{width:100%;}
+  .header-actions{display:flex;align-items:center;gap:18px;}
+  .btn-login{
+    background:var(--gold);color:var(--teal-dark);font-weight:600;
+    padding:10px 26px;border-radius:30px;font-size:.9rem;
+    transition:transform .25s ease, box-shadow .25s ease;
+    border:none;cursor:pointer;
+  }
+  .btn-login:hover{box-shadow:0 8px 20px rgba(217,164,65,0.4);}
+  .hamburger{
+    display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:1100;
+    width:32px;
+  }
+  .hamburger span{
+    display:block;height:3px;width:100%;background:var(--white);border-radius:3px;
+    transition:all .3s ease;
+  }
+
+  /* ===== Mobile Menu ===== */
+  .mobile-menu{
+    position:fixed;top:0;right:-100%;width:78%;max-width:340px;height:100vh;
+    background:var(--teal-dark);z-index:1050;
+    padding:30px 26px;
+    transition:right .4s cubic-bezier(.77,0,.18,1);
+    display:flex;flex-direction:column;
+    box-shadow:-10px 0 40px rgba(0,0,0,.25);
+  }
+  .mobile-menu.open{right:0;}
+  .mobile-menu .exit-btn{
+    align-self:flex-end;background:rgba(255,255,255,0.12);border:none;color:var(--white);
+    width:40px;height:40px;border-radius:50%;font-size:1.3rem;cursor:pointer;margin-bottom:30px;
+    transition:background .25s ease, transform .25s ease;
+  }
+  .mobile-menu .exit-btn:hover{background:var(--coral);transform:rotate(90deg);}
+  .mobile-menu a{
+    color:var(--cream);font-size:1.15rem;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.08);
+    font-weight:500;
+  }
+  .mobile-menu .btn-login{margin-top:24px;text-align:center;display:block;}
+  .overlay{
+    position:fixed;inset:0;background:rgba(8,20,19,0.55);z-index:1040;
+    opacity:0;visibility:hidden;transition:opacity .35s ease, visibility .35s ease;
+  }
+  .overlay.show{opacity:1;visibility:visible;}
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;min-height:100vh;
+    display:flex;align-items:center;
+    padding:140px 0 80px;
+    background:
+      radial-gradient(circle at 85% 20%, rgba(217,164,65,0.18), transparent 45%),
+      radial-gradient(circle at 10% 80%, rgba(12,110,106,0.12), transparent 40%),
+      var(--cream);
+    overflow:hidden;
+  }
+  .hero-bg-img{
+    position:absolute;inset:-6% 0 0 0;height:112%;
+    background:url('./assets/index\ bg.webp') center/cover no-repeat;
+    opacity:100;
+    pointer-events:none;z-index:0;
+  }
+  .hero::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg, var(--cream) 0%, rgba(250,243,230,0.55) 40%, var(--cream) 100%);
+    pointer-events:none;z-index:0;
+  }
+  .hero .container{
+    position:relative;z-index:1;
+    display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center;
+  }
+  .hero-left{padding-left:0;}
+  .trust-strip{
+    margin-top:38px;padding-top:26px;border-top:1px solid rgba(12,110,106,0.15);
+  }
+  .trust-strip span.label{
+    display:block;font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;color:#7a8a89;
+    font-weight:600;margin-bottom:14px;
+  }
+  .trust-logos{display:flex;align-items:center;gap:28px;flex-wrap:wrap;}
+  .trust-logos .t-item{
+    display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-weight:700;
+    color:#8b9998;font-size:.98rem;opacity:.75;transition:opacity .3s ease, transform .3s ease;
+  }
+  .trust-logos .t-item:hover{opacity:1;transform:translateY(-2px);color:var(--teal-dark);}
+  .play-btn{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,0.92);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px rgba(0,0,0,0.25);
+    cursor:pointer;transition:transform .35s ease, background .35s ease;
+    z-index:2;
+  }
+  .play-btn::before{
+    content:'';width:0;height:0;
+    border-left:18px solid var(--teal);border-top:11px solid transparent;border-bottom:11px solid transparent;
+    margin-left:5px;
+  }
+  .play-btn::after{
+    content:'';position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,255,255,0.7);
+    animation:pulseRing 2.2s ease-out infinite;
+  }
+  @keyframes pulseRing{
+    0%{transform:scale(1);opacity:.8;}
+    100%{transform:scale(1.6);opacity:0;}
+  }
+  .play-btn:hover{transform:translate(-50%,-50%) scale(1.1);background:var(--gold);}
+  .accred-ribbon{
+    position:absolute;top:-18px;left:24px;background:var(--teal-dark);color:var(--white);
+    padding:10px 18px;border-radius:12px;font-size:.78rem;font-weight:700;letter-spacing:.4px;
+    box-shadow:0 10px 24px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;z-index:2;
+  }
+  .hero-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--cream-2);color:var(--teal-dark);
+    padding:8px 18px;border-radius:30px;font-size:.82rem;font-weight:600;
+    letter-spacing:.5px;margin-bottom:22px;
+  }
+  .hero-tag::before{content:'●';color:var(--coral);}
+  .hero h1{
+    font-size:3.1rem;line-height:1.15;color:var(--ink);margin-bottom:20px;
+  }
+  .hero h1 .word{display:inline-block;overflow:hidden;}
+  .hero h1 .accent{color:var(--teal);font-style:italic;}
+  .hero p.lead{
+    font-size:1.08rem;color:#4a5c5b;max-width:480px;margin-bottom:32px;line-height:1.7;
+  }
+  .hero-btns{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:36px;}
+  .btn-primary{
+    background:var(--teal);color:var(--white);padding:15px 34px;border-radius:32px;
+    font-weight:600;font-size:.95rem;box-shadow:0 14px 30px rgba(12,110,106,0.28);
+    transition:transform .25s ease, background .25s ease;
+    display:inline-block;
+  }
+  .btn-primary:hover{background:var(--teal-dark);}
+  .btn-outline{
+    border:2px solid var(--teal);color:var(--teal);padding:13px 30px;border-radius:32px;
+    font-weight:600;font-size:.95rem;transition:all .25s ease;display:inline-block;
+  }
+  .btn-outline:hover{background:var(--teal);color:var(--white);}
+  .hero-stats{display:flex;gap:36px;}
+  .hero-stats div h3{font-size:1.8rem;color:var(--teal-dark);}
+  .hero-stats div span{font-size:.82rem;color:#6b7a79;}
+  .hero-visual{position:relative;}
+  .hero-visual .main-img{
+    position:relative;border-radius:28px;overflow:hidden;box-shadow:var(--shadow);
+    transform:rotate(2deg);transition:transform .5s ease;
+  }
+  .hero-visual .main-img:hover{transform:rotate(0deg) scale(1.02);}
+  .hero-visual .main-img img{height:520px;object-fit:cover;width:100%;transition:transform .6s ease;}
+  .floating-card{
+    position:absolute;background:var(--white);border-radius:18px;padding:16px 20px;
+    box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;
+  }
+  .floating-card.card-1{top:20px;left:-20px;}
+  .floating-card.card-2{bottom:30px;right:-10px;}
+  .floating-card .icon{
+    width:42px;height:42px;background:var(--cream-2);border-radius:12px;
+    display:flex;align-items:center;justify-content:center;color:var(--teal);
+  }
+  .floating-card strong{display:block;font-size:.95rem;}
+  .floating-card span{font-size:.78rem;color:#6b7a79;}
+
+  /* ===== Section shared ===== */
+  section{padding:100px 0;}
+  .section-head{text-align:center;max-width:640px;margin:0 auto 60px;}
+  .section-tag{
+    color:var(--coral);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:.8rem;
+    margin-bottom:12px;display:block;
+  }
+  .section-head h2{font-size:2.4rem;color:var(--ink);}
+  .section-head p{color:#5c6b6a;margin-top:14px;line-height:1.7;}
+
+  /* ===== Why Us ===== */
+  .why-us{background:var(--white);}
+  .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;}
+  .why-card{
+    background:var(--cream);padding:36px 28px;border-radius:22px;text-align:center;
+    transition:transform .35s ease, box-shadow .35s ease;
+  }
+  .why-card:hover{transform:translateY(-10px);box-shadow:var(--shadow);}
+  .why-card .icon-circle{
+    width:66px;height:66px;border-radius:50%;background:var(--teal);color:var(--white);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:1.6rem;
+    transition:transform .4s ease, background .4s ease;
+  }
+  .why-card:hover .icon-circle{transform:scale(1.12) rotate(-6deg);background:var(--coral);}
+  .why-card h4{margin-bottom:10px;font-size:1.1rem;}
+  .why-card p{font-size:.88rem;color:#63706f;line-height:1.6;}
+
+  /* ===== Programs ===== */
+  .programs{background:var(--cream-2);}
+  .program-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;}
+  .program-card{
+    background:var(--white);border-radius:22px;overflow:hidden;box-shadow:0 10px 28px rgba(12,110,106,0.08);
+    transition:transform .35s ease, box-shadow .35s ease;position:relative;
+  }
+  .program-card:hover{transform:translateY(-8px);box-shadow:var(--shadow);}
+  .program-card .img-wrap{height:180px;overflow:hidden;}
+  .program-card .img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .program-card:hover .img-wrap img{transform:scale(1.1);}
+  .program-card .content{padding:22px;}
+  .program-card .badge{
+    display:inline-block;background:var(--cream-2);color:var(--teal-dark);
+    font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:10px;
+  }
+  .program-card h4{font-size:1.1rem;margin-bottom:8px;}
+  .program-card p{font-size:.86rem;color:#63706f;margin-bottom:14px;line-height:1.6;}
+  .program-card .link{color:var(--teal);font-weight:600;font-size:.88rem;}
+
+  /* ===== About / Split ===== */
+  .about-split{background:var(--white);}
+  .split-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:60px;align-items:center;}
+  .split-imgs{position:relative;}
+  .split-imgs img{border-radius:22px;box-shadow:var(--shadow);}
+  .split-imgs .img-big{width:80%;}
+  .split-imgs .img-small{
+    width:55%;position:absolute;bottom:-40px;right:-10px;border:6px solid var(--cream);
+  }
+  .split-text .section-tag{margin-bottom:12px;}
+  .split-text h2{font-size:2.2rem;margin-bottom:18px;}
+  .split-text p{color:#5c6b6a;line-height:1.8;margin-bottom:24px;}
+  .check-list{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:30px;}
+  .check-list li{display:flex;align-items:center;gap:10px;font-size:.92rem;color:#3d4d4c;font-weight:500;}
+  .check-list li .tick{
+    width:24px;height:24px;border-radius:50%;background:var(--teal);color:var(--white);
+    display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;
+  }
+
+  /* ===== Coaches ===== */
+  .coaches{background:var(--cream);}
+  .coach-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;}
+  .coach-card{text-align:center;}
+  .coach-card .photo{
+    border-radius:22px;overflow:hidden;margin-bottom:18px;position:relative;box-shadow:0 10px 24px rgba(12,110,106,0.1);
+  }
+  .coach-card .photo img{height:280px;object-fit:cover;width:100%;transition:transform .5s ease;}
+  .coach-card:hover .photo img{transform:scale(1.08);}
+  .coach-card h4{font-size:1.05rem;margin-bottom:4px;}
+  .coach-card span{font-size:.82rem;color:var(--coral);font-weight:600;}
+
+  /* ===== Gallery / Facilities ===== */
+  .facilities{background:var(--teal);color:var(--white);position:relative;overflow:hidden;}
+  .facilities .section-head h2, .facilities .section-head p{color:var(--white);}
+  .facilities .section-tag{color:var(--gold);}
+  .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:170px;gap:18px;}
+  .gallery-grid .g-item{border-radius:18px;overflow:hidden;position:relative;}
+  .gallery-grid .g-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .gallery-grid .g-item:hover img{transform:scale(1.12);}
+  .gallery-grid .g-item.tall{grid-row:span 2;}
+  .g-caption{
+    position:absolute;inset:0;display:flex;align-items:flex-end;padding:18px;
+    background:linear-gradient(180deg, rgba(12,110,106,0) 35%, rgba(12,110,106,0.94) 100%);
+    opacity:0;transition:opacity .35s ease;
+  }
+  .gallery-grid .g-item:hover .g-caption{opacity:1;}
+  .g-caption p{
+    color:var(--white);font-size:.85rem;line-height:1.45;font-weight:500;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+
+  /* ===== CTA banner ===== */
+  .cta-banner{
+    background:linear-gradient(120deg,var(--gold),#e8b85c);
+    border-radius:30px;padding:60px;display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:24px;max-width:1600px;margin:0 auto;
+    box-shadow:0 30px 60px rgba(217,164,65,0.35);
+  }
+  .cta-banner h2{font-size:2rem;color:var(--teal-dark);max-width:480px;}
+  .cta-banner .btn-primary{background:var(--teal-dark);}
+
+  /* ===== Testimonials ===== */
+  .testimonials{background:var(--white);}
+  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;align-items:stretch;}
+  .testi-card{
+    background:var(--cream);padding:32px;border-radius:22px;position:relative;
+    display:flex;flex-direction:column;
+  }
+  .testi-card .quote-mark{font-size:3rem;color:var(--teal-light);font-family:'Playfair Display',serif;line-height:.5;margin-bottom:14px;display:block;}
+  .testi-card p{color:#4a5c5b;line-height:1.7;margin-bottom:20px;font-size:.93rem;}
+  .testi-user{display:flex;align-items:center;gap:12px;margin-top:auto;}
+  .testi-user img{width:46px;height:46px;border-radius:50%;object-fit:cover;flex-shrink:0;}
+  .testi-user strong{display:block;font-size:.9rem;}
+  .testi-user span{font-size:.78rem;color:#6b7a79;}
+
+  /* ===== Footer ===== */
+  footer{background:var(--teal-dark);color:var(--cream);padding:80px 0 0;}
+  .footer-grid{
+    display:grid;grid-template-columns:1.3fr 1fr 1fr 1.2fr;gap:40px;padding-bottom:50px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .footer-col .logo-wrap img{height:50px;}
+  .footer-col .logo-wrap span{color:var(--white);font-size:1.2rem;}
+  .footer-col p.desc{margin-top:16px;font-size:.88rem;line-height:1.75;color:#bcd3d1;max-width:280px;}
+  .social-row{display:flex;gap:12px;margin-top:22px;}
+  .social-row a{
+    width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.08);
+    display:flex;align-items:center;justify-content:center;transition:all .3s ease;
+  }
+  .social-row a:hover{background:var(--gold);transform:translateY(-4px);}
+  .social-row svg{width:18px;height:18px;fill:var(--cream);}
+  .social-row a:hover svg{fill:var(--teal-dark);}
+  .footer-col h4{color:var(--white);font-size:1.02rem;margin-bottom:20px;}
+  .footer-col ul li{margin-bottom:12px;}
+  .footer-col ul li a{font-size:.88rem;color:#bcd3d1;transition:color .25s ease, padding-left .25s ease;}
+  .footer-col ul li a:hover{color:var(--gold);padding-left:6px;}
+  .footer-col .address-block{font-size:.88rem;color:#bcd3d1;line-height:1.8;}
+  .footer-col .address-block .row{display:flex;gap:10px;margin-bottom:14px;align-items:flex-start;}
+  .footer-col .address-block svg{width:18px;height:18px;fill:var(--gold);flex-shrink:0;margin-top:2px;}
+  .footer-bottom{
+    display:flex;justify-content:space-between;align-items:center;padding:26px 0;
+    font-size:.82rem;color:#8fadab;flex-wrap:wrap;gap:10px;
+  }
+  .footer-legal{display:flex;gap:10px;align-items:center;}
+  .footer-legal a{font-size:.82rem;color:#8fadab;transition:color .25s ease;}
+  .footer-legal a:hover{color:var(--gold);}
+  .footer-legal .dot{color:#8fadab;}
+
+  /* ===== Reveal animation base ===== */
+  .reveal{opacity:0;transform:translateY(40px);}
+
+  /* ===== Responsive ===== */
+  @media(max-width:1024px){
+    :root{--gutter:36px;}
+    .why-grid{grid-template-columns:repeat(2,1fr);}
+    .program-grid{grid-template-columns:repeat(2,1fr);}
+    .coach-grid{grid-template-columns:repeat(2,1fr);}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .testi-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+    .hero .container{grid-template-columns:1fr;}
+    .hero-visual{order:-1;}
+  }
+  @media(max-width:768px){
+    :root{--gutter:22px;}
+    nav.primary-nav{display:none;}
+    .header-actions .btn-login{display:none;}
+    .hamburger{display:flex;}
+    .hero{padding-top:120px;}
+    .hero h1{font-size:2.1rem;}
+    .why-grid{grid-template-columns:1fr;}
+    .program-grid{grid-template-columns:1fr;}
+    .coach-grid{grid-template-columns:1fr;max-width:340px;margin:0 auto;}
+    .coach-card .photo img{height:320px;}
+    .gallery-grid{grid-template-columns:1fr;grid-auto-rows:220px;}
+    .gallery-grid .g-item.tall{grid-row:span 1;}
+    .check-list{grid-template-columns:1fr;}
+    .split-grid{grid-template-columns:1fr;}
+    .split-imgs .img-small{position:static;width:60%;margin-top:-40px;margin-left:auto;}
+    .cta-banner{flex-direction:column;text-align:center;padding:40px 26px;}
+    .cta-banner h2{max-width:100%;}
+    .footer-grid{grid-template-columns:1fr;}
+    .hero-stats{flex-wrap:wrap;gap:22px;}
+    .floating-card{display:none;}
+    .trust-logos{gap:16px 22px;}
+    section{padding:70px 0;}
+  }
+
+  /* ============ PRELOADER (simple) ============ */
+  .preloader{
+    position:fixed; inset:0; z-index:9999;
+    background:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity .5s ease;
+  }
+  .preloader.hide{ opacity:0; pointer-events:none; }
+  .preloader img{ height:42px; width:auto; border-radius:8px; animation:preloaderPulse 1.3s ease-in-out infinite; }
+  @keyframes preloaderPulse{ 0%,100%{ opacity:.45; transform:scale(.94); } 50%{ opacity:1; transform:scale(1); } }
+  @media (prefers-reduced-motion: reduce){ .preloader img{ animation:none; } .preloader{ transition:none; } }
+</style>
+</head>
+<body>
+<div class="preloader" id="preloader" role="status" aria-live="polite" aria-label="Loading">
+  <img src="stackly-logo.webp" alt="">
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+       <a href="index.html" class="logo-wrap">
+      <img src="stackly-logo.webp" alt="Stackly Aqua Academy logo">
+    </a>
+    </div>
+    <nav class="primary-nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="about.html" class="">About</a>
+      <a href="services.html" class="">Services</a>
+      <a href="programs.html" class="">Programs</a>
+      <a href="blogs.html" class="">Blogs</a>
+      <a href="contact.html" class="">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a href="./login.html" class="btn-login">Login</a>
+      <div class="hamburger" id="hamburgerBtn">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="overlay" id="overlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="exit-btn" id="exitBtn">&times;</button>
+  <a href="index.html" class="active">Home</a>
+  <a href="about.html" class="">About</a>
+  <a href="services.html" class="">Services</a>
+  <a href="programs.html" class="">Programs</a>
+  <a href="blogs.html" class="">Blogs</a>
+  <a href="contact.html" class="">Contact</a>
+  <a href="login.html" class="btn-login">Login</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <div class="hero-bg-img" id="heroBgImg"></div>
+  <div class="container">
+    <div class="hero-left">
+      <span class="hero-tag">Salem's Premier Swim School</span>
+      <h1 id="heroHeading">
+        <span class="word">Dive</span> <span class="word">Into</span> <span class="word">Confidence,</span><br>
+        <span class="word accent">One</span> <span class="word accent">Stroke</span> <span class="word accent">At</span> <span class="word accent">A</span> <span class="word accent">Time</span>
+      </h1>
+      <p class="lead">From first splashes to competitive strokes, Stackly Aqua Academy blends certified coaching, safe pools, and joyful learning for every age — right here in Salem.</p>
+      <div class="hero-btns">
+        <a href="./404.html" class="btn-primary">Explore Programs</a>
+        <a href="./404.html" class="btn-outline">Book a Free Trial</a>
+      </div>
+      <div class="hero-stats">
+        <div><h3 class="counter" data-target="1200">0</h3><span>Swimmers Trained</span></div>
+        <div><h3 class="counter" data-target="18">0</h3><span>Certified Coaches</span></div>
+        <div><h3 class="counter" data-target="12">0</h3><span>Years Running</span></div>
+      </div>
+      <div class="trust-strip reveal">
+        <span class="label">Accredited & Recognised By</span>
+        <div class="trust-logos">
+          <div class="t-item">🏅 Swim India</div>
+          <div class="t-item">💧 Aqua Safety Board</div>
+          <div class="t-item">🎖 Tamil Nadu Swim Assoc.</div>
+          <div class="t-item">⭐ 4.9 Rated</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="accred-ribbon">🏆 #1 Swim School In Salem</div>
+      <div class="main-img">
+        <img src="./assets/Swimmer diving into pool.webp" alt="Swimmer diving into pool">
+        
+      </div>
+      <div class="floating-card card-1">
+        <div class="icon">🏊</div>
+        <div><strong>Kids Batch</strong><span>Starts 6 AM Daily</span></div>
+      </div>
+      <div class="floating-card card-2">
+        <div class="icon">🏆</div>
+        <div><strong>State Champions</strong><span>24 medals in 2025</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY US ===== -->
+<section class="why-us">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Why Choose Us</span>
+      <h2>Built For Safety, Designed For Speed</h2>
+      <p>Every lane, every lesson, every coach — built around one goal: helping you swim better and love the water more.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="icon-circle">🛟</div>
+        <h4>Certified Lifeguards</h4>
+        <p>On-deck safety staff at every session, trained in CPR and water rescue.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon-circle">👩‍🏫</div>
+        <h4>Expert Coaches</h4>
+        <p>National-level trainers who tailor technique to every swimmer's pace.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon-circle">💧</div>
+        <h4>Treated Pool Water</h4>
+        <p>UV & ozone filtration keeps every pool crystal clear and skin-safe.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon-circle">📅</div>
+        <h4>Flexible Batches</h4>
+        <p>Morning, evening and weekend slots for kids, adults and professionals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROGRAMS ===== -->
+<section class="programs" id="programs">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Our Programs</span>
+      <h2>A Program For Every Swimmer</h2>
+      <p>Whether it's your child's first lesson or your route to a competitive title, we have a lane for you.</p>
+    </div>
+    <div class="program-grid">
+      <div class="program-card reveal">
+        <div class="img-wrap"><img src="./assets/kids.webp" alt="Kids swimming lesson"></div>
+        <div class="content">
+          <span class="badge">Ages 4–12</span>
+          <h4>Little Splashers</h4>
+          <p>Water-confidence building through play-based lessons for young beginners.</p>
+          <a href="./404.html" class="link">Learn More →</a>
+        </div>
+      </div>
+      <div class="program-card reveal">
+        <div class="img-wrap"><img src="./assets/adult.webp" alt="Adult swimming class"></div>
+        <div class="content">
+          <span class="badge">Adults</span>
+          <h4>Adult Learn-to-Swim</h4>
+          <p>Judgment-free coaching for beginners of any age, at your own pace.</p>
+          <a href="./404.html" class="link">Learn More →</a>
+        </div>
+      </div>
+      <div class="program-card reveal">
+        <div class="img-wrap"><img src="./assets/aggresive training.webp" alt="Competitive swim training"></div>
+        <div class="content">
+          <span class="badge">Ages 10+</span>
+          <h4>Competitive Squad</h4>
+          <p>Advanced technique, speed drills and meet prep for aspiring champions.</p>
+          <a href="./404.html" class="link">Learn More →</a>
+        </div>
+      </div>
+      <div class="program-card reveal">
+        <div class="img-wrap"><img src="./assets/fitness.webp" alt="Aqua fitness class"></div>
+        <div class="content">
+          <span class="badge">All Ages</span>
+          <h4>Aqua Fitness</h4>
+          <p>Low-impact water workouts that build strength, stamina and calm.</p>
+          <a href="./404.html" class="link">Learn More →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT SPLIT ===== -->
+<section class="about-split" id="about">
+  <div class="container split-grid">
+    <div class="split-imgs reveal">
+      <img class="img-big" src="./assets/Swim coach training a student.webp" alt="Swim coach training a student">
+      <img class="img-small" src="./assets/Child learning to swim.webp" alt="Child learning to swim">
+    </div>
+    <div class="split-text reveal">
+      <span class="section-tag">About Stackly Aqua</span>
+      <h2>12 Years Of Turning Beginners Into Confident Swimmers</h2>
+      <p>Stackly Aqua Academy was founded to make world-class swim coaching accessible to every family in Salem. Our heated, filtered pools and structured curriculum help swimmers of every level progress safely and joyfully — with real results you can measure.</p>
+      <ul class="check-list">
+        <li><span class="tick">✓</span> Small batch sizes</li>
+        <li><span class="tick">✓</span> Personalised progress tracking</li>
+        <li><span class="tick">✓</span> Free trial class</li>
+        <li><span class="tick">✓</span> Locker & changing rooms</li>
+      </ul>
+      <a href="./404.html" class="btn-primary">Book A Free Trial</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COACHES ===== -->
+<section class="coaches" id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Meet The Team</span>
+      <h2>Coaches Who Care About Every Stroke</h2>
+      <p>Nationally certified trainers dedicated to your swimming journey, in and out of the water.</p>
+    </div>
+    <div class="coach-grid">
+      <div class="coach-card reveal">
+        <div class="photo"><img src="./assets/img1.webp" alt="Head coach portrait"></div>
+        <h4>Arjun Iyer</h4>
+        <span>Head Coach</span>
+      </div>
+      <div class="coach-card reveal">
+        <div class="photo"><img src="./assets/img2.webp" alt="Kids program coach portrait"></div>
+        <h4>Meera Suresh</h4>
+        <span>Kids Program Lead</span>
+      </div>
+      <div class="coach-card reveal">
+        <div class="photo"><img src="./assets/img3.webp" alt="Competitive coach portrait"></div>
+        <h4>Vikram Rao</h4>
+        <span>Competitive Coach</span>
+      </div>
+      <div class="coach-card reveal">
+        <div class="photo"><img src="./assets/img4.webp" alt="Fitness coach portrait"></div>
+        <h4>Divya Menon</h4>
+        <span>Aqua Fitness Trainer</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FACILITIES / GALLERY ===== -->
+<section class="facilities">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Our Facilities</span>
+      <h2>A Pool Built For Every Ambition</h2>
+      <p>Semi-Olympic lanes, heated indoor pools and dedicated kids' shallow zones.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="g-item tall reveal">
+        <img src="./assets/indoor.webp" alt="Indoor swimming pool facility">
+        <div class="g-caption"><p>Our heated indoor pool stays swim-ready year-round, rain or shine.</p></div>
+      </div>
+      <div class="g-item reveal">
+        <img src="./assets/lanes.webp" alt="Pool lanes">
+        <div class="g-caption"><p>Semi-Olympic lanes give every squad room to train at full speed.</p></div>
+      </div>
+      <div class="g-item reveal">
+        <img src="./assets/kids arena.webp" alt="Kids pool area">
+        <div class="g-caption"><p>A dedicated shallow zone lets young swimmers build confidence safely.</p></div>
+      </div>
+      <div class="g-item tall reveal">
+        <img src="./assets/swimming lesson.webp" alt="Swimming lesson in progress">
+        <div class="g-caption"><p>Small-batch lessons mean hands-on attention from every coach.</p></div>
+      </div>
+      <div class="g-item reveal">
+        <img src="./assets/pool side.webp" alt="Poolside training">
+        <div class="g-caption"><p>Poolside drills sharpen technique before swimmers hit the water.</p></div>
+      </div>
+      <div class="g-item reveal">
+        <img src="./assets/Swim coach training a student.webp" alt="Aqua fitness session">
+        <div class="g-caption"><p>One-on-one coaching keeps every stroke correction personal.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA BANNER ===== -->
+<section style="padding:90px 24px;">
+  <div class="cta-banner reveal">
+    <h2>Ready to make a splash? Your first class is on us.</h2>
+    <a href="./404.html" class="btn-primary">Book Free Trial Class</a>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Testimonials</span>
+      <h2>Loved By Families Across Salem</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <span class="quote-mark">"</span>
+        <p>My daughter went from being scared of water to swimming laps in 3 months. The coaches are incredibly patient.</p>
+        <div class="testi-user">
+          <img src="./assets/a1.webp" alt="Parent testimonial photo">
+          <div><strong>Priya Ramesh</strong><span>Parent, Little Splashers</span></div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <span class="quote-mark">"</span>
+        <p>Started as a complete beginner at 34. The adult batch timing and no-judgment coaching made all the difference.</p>
+        <div class="testi-user">
+          <img src="./assets/a3.webp" alt="Adult swimmer testimonial photo">
+          <div><strong>Karthik S.</strong><span>Adult Learn-to-Swim</span></div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <span class="quote-mark">"</span>
+        <p>The Aqua Fitness batch changed how I recover from long work weeks — low impact, high energy, and the coaches always check on your form.</p>
+        <div class="testi-user">
+          <img src="./assets/a2.webp" alt="Aqua fitness member testimonial photo">
+          <div><strong>Lakshmi N.</strong><span>Member, Aqua Fitness</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="contact">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col reveal">
+        <div class="logo-wrap">
+           <a href="index.html" class="logo-wrap">
+      <img src="stackly-logo.webp" alt="Stackly Aqua Academy logo">
+    </a>
+        </div>
+        <p class="desc">Stackly Aqua Academy is Salem's trusted swim school, offering certified coaching for kids, adults and competitive swimmers in safe, treated pools since 2013.</p>
+        <div class="social-row">
+          <a href="./404.html" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 2.1.26 2.8.55.8.31 1.4.72 2 1.33.6.6 1 1.2 1.3 2 .3.7.5 1.6.6 2.8.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 2.1-.6 2.8-.3.8-.7 1.4-1.3 2-.6.6-1.2 1-2 1.3-.7.3-1.6.5-2.8.6-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-2.1-.3-2.8-.6-.8-.3-1.4-.7-2-1.3-.6-.6-1-1.2-1.3-2-.3-.7-.5-1.6-.6-2.8C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-2.1.6-2.8.3-.8.7-1.4 1.3-2 .6-.6 1.2-1 2-1.3.7-.3 1.6-.5 2.8-.6C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.8.07-1 .05-1.6.22-2 .37-.5.19-.85.42-1.22.79-.37.37-.6.72-.79 1.22-.15.4-.32 1-.37 2C2.77 9.5 2.77 9.9 2.77 13s0 3.5.07 4.8c.05 1 .22 1.6.37 2 .19.5.42.85.79 1.22.37.37.72.6 1.22.79.4.15 1 .32 2 .37 1.3.07 1.7.07 4.8.07s3.5 0 4.8-.07c1-.05 1.6-.22 2-.37.5-.19.85-.42 1.22-.79.37-.37.6-.72.79-1.22.15-.4.32-1 .37-2 .07-1.3.07-1.7.07-4.8s0-3.5-.07-4.8c-.05-1-.22-1.6-.37-2-.19-.5-.42-.85-.79-1.22-.37-.37-.72-.6-1.22-.79-.4-.15-1-.32-2-.37-1.3-.07-1.7-.07-4.8-.07zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.8a3.2 3.2 0 100 6.4 3.2 3.2 0 000-6.4zm5.2-2a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg>
+          </a>
+          <a href="./404.html" aria-label="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M13.5 21v-7.9h2.65l.4-3.08h-3.05V8.06c0-.89.25-1.5 1.53-1.5h1.63V3.8c-.28-.04-1.25-.12-2.37-.12-2.35 0-3.96 1.43-3.96 4.06v2.26H7.67v3.08H10.3V21h3.2z"/></svg>
+          </a>
+          <a href="./404.html" aria-label="X / Twitter">
+            <svg viewBox="0 0 24 24"><path d="M18.9 3H21l-6.55 7.49L22.2 21h-6.03l-4.72-6.17L5.9 21H3.79l7-8L2 3h6.18l4.27 5.64L18.9 3zm-1.06 16.2h1.1L7.22 4.72H6.03L17.84 19.2z"/></svg>
+          </a>
+          <a href="./404.html" aria-label="YouTube">
+            <svg viewBox="0 0 24 24"><path d="M22 8.6s-.2-1.5-.8-2.2c-.8-.8-1.6-.8-2-.9C16.3 5.2 12 5.2 12 5.2h-.01s-4.3 0-7.2.3c-.4.1-1.2.1-2 .9-.6.7-.8 2.2-.8 2.2S1.8 10.3 1.8 12v1.4c0 1.7.2 3.4.2 3.4s.2 1.5.8 2.2c.8.8 1.85.78 2.32.87C6.7 20 12 20 12 20s4.3 0 7.2-.3c.4-.1 1.2-.1 2-.9.6-.7.8-2.2.8-2.2s.2-1.7.2-3.4V12c0-1.7-.2-3.4-.2-3.4zM9.8 15V9l5.6 3-5.6 3z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col reveal">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="./index.html">Home</a></li>
+          <li><a href="./about.html">About Us</a></li>
+          <li><a href="./services.html">Services</a></li>
+          <li><a href="./programs.html">Programs</a></li>
+          <li><a href="./blogs.html">Blogs</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col reveal">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="./404.html">Kids Swim Lessons</a></li>
+          <li><a href="./404.html">Adult Learn-to-Swim</a></li>
+          <li><a href="./404.html">Competitive Training</a></li>
+          <li><a href="./404.html">Aqua Fitness</a></li>
+          <li><a href="./404.html">Private Coaching</a></li>
+        </ul>
+      </div>
+      <div class="footer-col reveal">
+        <h4>Reach Us</h4>
+        <div class="address-block">
+          <div class="row">
+            <svg viewBox="0 0 24 24"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.4 7 12 8 12s8-6.6 8-12c0-4.4-3.6-8-8-8zm0 10.8a2.8 2.8 0 110-5.6 2.8 2.8 0 010 5.6z"/></svg>
+            <span>MMR Complex, Periyakollappatty, Chinna Thirupathi, Salem, Tamil Nadu 636008</span>
+          </div>
+          <div class="row">
+            <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C11.6 21 3 12.4 3 2c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+            <span>+91 98765 43210</span>
+          </div>
+          <div class="row">
+            <svg viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm2 2v.01L12 12l8-5.99V6H4zm16 2.24l-7.4 5.55a1 1 0 01-1.2 0L4 8.24V18h16V8.24z"/></svg>
+            <span>hello@stacklyaqua.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Stackly Aqua Academy. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="404.html">Privacy Policy</a>
+        <span class="dot">·</span>
+        <a href="404.html">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ============ Preloader hide + exact-area restore (for 404 "Go Back") ============ */
+(function(){
+  var htmlEl = document.documentElement;
+  var pre = document.getElementById('preloader');
+  var start = Date.now();
+  var MIN_MS = 350;
+  var PATH = 'index.html';
+
+  function restoreScroll(){
+    try{
+      var raw = sessionStorage.getItem('stackly_restore_scroll');
+      if(raw){
+        var data = JSON.parse(raw);
+        if(data && data.path === PATH){
+          sessionStorage.removeItem('stackly_restore_scroll');
+          if(typeof data.y === 'number'){
+            var prevBehavior = htmlEl.style.scrollBehavior;
+            htmlEl.style.scrollBehavior = 'auto';
+            window.scrollTo(0, data.y);
+            void htmlEl.offsetHeight;
+            htmlEl.style.scrollBehavior = prevBehavior || '';
+          }
+        }
+      }
+    }catch(e){}
+  }
+
+  function reveal(){
+    restoreScroll();
+    document.body.classList.add('loaded');
+    if(pre){
+      pre.classList.add('hide');
+      setTimeout(function(){ pre.style.display = 'none'; }, 550);
+    }
+  }
+
+  function onReady(){
+    var wait = Math.max(0, MIN_MS - (Date.now() - start));
+    setTimeout(reveal, wait);
+  }
+  if(document.readyState === 'complete'){ onReady(); }
+  else{ window.addEventListener('load', onReady); }
+
+  /* remember exactly where on the page we were, so the 404 page's "Go Back" returns here */
+  window.addEventListener('beforeunload', function(){
+    try{ sessionStorage.setItem('stackly_last_position', JSON.stringify({ path: PATH, y: window.scrollY || window.pageYOffset || 0 })); }catch(e){}
+  });
+})();
+
+/* Hero word reveal animation */
+gsap.set('.hero h1 .word', {y: '110%', opacity: 0});
+gsap.to('.hero h1 .word', {
+  y: '0%', opacity: 1, duration: 1, ease: 'power4.out', stagger: 0.08, delay: 0.3
+});
+gsap.from('.hero-tag', {opacity:0, y:-20, duration:.8, delay:.1});
+gsap.from('.hero-left .lead, .hero-left .hero-btns, .hero-left .hero-stats', {
+  opacity:0, y:30, duration:1, stagger:.15, delay:1.1
+});
+gsap.from('.hero-visual', {opacity:0, x:60, duration:1.1, delay:.6, ease:'power3.out'});
+gsap.from('.floating-card', {opacity:0, scale:.7, duration:.9, delay:1.6, stagger:.2, ease:'back.out(1.7)'});
+
+/* Scroll reveals */
+document.querySelectorAll('.reveal').forEach((el)=>{
+  gsap.to(el, {
+    opacity:1, y:0, duration:.9, ease:'power3.out',
+    scrollTrigger:{trigger:el, start:'top 85%'}
+  });
+});
+
+/* Stagger footer columns as a group */
+gsap.to('.footer-col.reveal', {
+  opacity:1, y:0, duration:.8, ease:'power3.out', stagger:.12,
+  scrollTrigger:{trigger:'.footer-grid', start:'top 90%'}
+});
+
+/* Subtle parallax on hero image with cursor */
+const heroVisual = document.querySelector('.hero-visual .main-img');
+if(heroVisual){
+  document.querySelector('.hero').addEventListener('mousemove', (e)=>{
+    const r = document.querySelector('.hero').getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width/2) / r.width;
+    const y = (e.clientY - r.top - r.height/2) / r.height;
+    gsap.to(heroVisual, {x:x*18, y:y*14, duration:.6, ease:'power2.out'});
+  });
+}
+
+/* Scroll parallax drift on hero background */
+gsap.to('#heroBgImg', {yPercent:10, ease:'none', scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:true}});
+
+/* Play button click feedback */
+const playBtn = document.getElementById('playBtn');
+if(playBtn){
+  playBtn.addEventListener('click', ()=>{
+    gsap.fromTo(playBtn, {scale:1}, {scale:1.25, duration:.2, yoyo:true, repeat:1, ease:'power1.inOut'});
+  });
+}
+
+gsap.utils.toArray('.why-card, .program-card, .coach-card, .testi-card, .g-item').forEach((el, i)=>{
+  gsap.set(el, {opacity: el.classList.contains('reveal') ? 0 : 1});
+});
+
+/* Counter animation */
+document.querySelectorAll('.counter').forEach((counter)=>{
+  const target = +counter.getAttribute('data-target');
+  ScrollTrigger.create({
+    trigger: counter,
+    start: 'top 90%',
+    once: true,
+    onEnter: ()=>{
+      gsap.to(counter, {
+        innerText: target, duration: 1.8, snap:{innerText:1}, ease:'power2.out',
+        onUpdate: function(){ counter.innerText = Math.floor(counter.innerText); }
+      });
+    }
+  });
+});
+
+/* Hamburger menu */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const exitBtn = document.getElementById('exitBtn');
+const overlay = document.getElementById('overlay');
+
+function openMenu(){
+  mobileMenu.classList.add('open');
+  overlay.classList.add('show');
+  hamburgerBtn.classList.add('active');
+}
+function closeMenu(){
+  mobileMenu.classList.remove('open');
+  overlay.classList.remove('show');
+  hamburgerBtn.classList.remove('active');
+}
+hamburgerBtn.addEventListener('click', openMenu);
+exitBtn.addEventListener('click', closeMenu);
+overlay.addEventListener('click', closeMenu);
+document.querySelectorAll('.mobile-menu a').forEach(link=>{
+  link.addEventListener('click', closeMenu);
+});
+
+/* Header background shift on scroll */
+window.addEventListener('scroll', ()=>{
+  const header = document.querySelector('header');
+  if(window.scrollY > 60){
+    header.style.boxShadow = '0 6px 26px rgba(0,0,0,0.2)';
+  } else {
+    header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.12)';
+  }
+});
+
+</script>
+</body>
+</html>

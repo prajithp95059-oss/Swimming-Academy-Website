@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log In | Stackly Aqua Academy</title>
+<meta name="description" content="Log in to your Stackly Aqua Academy student or admin account to track batch attendance, progress cards and payments.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0c6e6a;
+    --teal-dark:#084d4a;
+    --teal-light:#12908a;
+    --cream:#faf3e6;
+    --cream-2:#f2e6d0;
+    --sand:#e8d9b8;
+    --coral:#ff7a59;
+    --gold:#d9a441;
+    --ink:#1c2b2a;
+    --ink-soft:#4a5c5b;
+    --white:#ffffff;
+    --red:#c0762b;
+    --line: rgba(12,110,106,0.16);
+    --shadow: 0 20px 45px rgba(12,110,106,0.15);
+    --serif:'Playfair Display', Georgia, serif;
+    --sans:'Poppins', Arial, sans-serif;
+    --ease: cubic-bezier(.22,.9,.3,1);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--cream); color:var(--ink); font-family:var(--sans);
+    font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  ul{margin:0;padding:0;list-style:none;}
+  button{font-family:inherit;cursor:pointer;}
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:600;margin:0;color:var(--ink);}
+  p{margin:0;color:var(--ink-soft);}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+  .split-word{display:inline-block;overflow:hidden;vertical-align:top;}
+  .split-word span{display:inline-block;transform:translateY(112%);}
+
+  /* ============ LAYOUT ============ */
+  .auth-wrap{min-height:100vh;display:grid;grid-template-columns:1.05fr 0.95fr;}
+
+  /* ---- VISUAL SIDE ---- */
+  .auth-visual{position:relative;overflow:hidden;background:var(--teal-dark);min-height:100vh;}
+  .auth-visual .bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45;}
+  .auth-visual .mesh{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(8,77,74,.55) 0%, rgba(8,77,74,.9) 62%, rgba(8,77,74,.97) 100%),
+               radial-gradient(ellipse 600px 400px at 15% 0%, rgba(217,164,65,.28), transparent 60%);
+  }
+  .auth-visual-content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(28px,4vw,56px);min-height:100vh;}
+  .av-logo img{height:44px;}
+  .av-hero{max-width:46ch;}
+  .av-eyebrow{font-family:var(--sans);font-weight:600;font-size:0.8rem;color:var(--gold);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .av-eyebrow::before{content:"";width:22px;height:1px;background:var(--gold);display:inline-block;}
+  .av-hero h1{color:var(--cream);font-size:clamp(2rem,3.4vw,2.9rem);line-height:1.15;margin-bottom:18px;}
+  .av-hero h1 em{font-style:italic;color:var(--gold);}
+  .av-hero p{color:rgba(250,243,230,.8);font-size:1.02rem;margin-bottom:30px;}
+  .av-stats{display:flex;gap:34px;flex-wrap:wrap;}
+  .av-stats div h3{color:var(--gold);font-size:1.7rem;margin-bottom:2px;font-family:var(--serif);}
+  .av-stats div span{font-family:var(--sans);font-size:0.75rem;color:rgba(250,243,230,.68);}
+  .av-quote{background:rgba(250,243,230,.08);border:1px solid rgba(250,243,230,.18);border-radius:16px;padding:22px 24px;max-width:44ch;backdrop-filter:blur(6px);}
+  .av-quote p{font-family:var(--serif);font-style:italic;color:var(--cream);font-size:1.02rem;line-height:1.5;margin-bottom:12px;}
+  .av-quote .who{font-family:var(--sans);font-weight:600;font-size:0.78rem;color:var(--gold);}
+
+  /* ---- FORM SIDE ---- */
+  .auth-panel{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:100vh;padding:clamp(28px,4vw,56px) clamp(28px,5vw,80px);background:var(--cream);}
+  .back-link{display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-weight:600;font-size:0.82rem;color:var(--ink-soft);width:fit-content;margin:32px auto 0;transition:.25s;}
+  .back-link svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;}
+  .back-link:hover{color:var(--teal);}
+  .auth-box{width:100%;max-width:430px;margin:0 auto;}
+
+  .mode-switch{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--cream-2);border-radius:30px;padding:5px;margin-bottom:34px;}
+  .mode-switch .slider{position:absolute;top:5px;left:5px;width:calc(50% - 5px);height:calc(100% - 10px);background:var(--teal);border-radius:26px;transition:transform .4s var(--ease);}
+  .mode-switch button{position:relative;z-index:2;background:none;border:none;padding:11px 0;font-weight:700;font-size:0.9rem;color:var(--ink-soft);transition:color .3s;border-radius:26px;}
+  .mode-switch button.active{color:var(--cream);}
+  .mode-switch[data-mode="signup"] .slider{transform:translateX(100%);}
+
+  .auth-eyebrow{font-family:var(--sans);font-weight:700;font-size:0.78rem;color:teal;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;}
+  .auth-box h1{font-size:1.7rem;margin-bottom:24px;}
+
+  .role-picker{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+  .role-opt input{position:absolute;opacity:0;pointer-events:none;}
+  .role-opt .card{
+    display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 10px;
+    border:1px solid var(--line);border-radius:14px;background:var(--white);font-size:0.85rem;font-weight:600;
+    color:var(--ink-soft);transition:.25s;cursor:pointer;
+  }
+  .role-opt .card svg{width:22px;height:22px;stroke:var(--ink-soft);fill:none;stroke-width:1.6;transition:.25s;}
+  .role-opt input:checked + .card{border-color:var(--teal);background:rgba(12,110,106,0.08);color:var(--ink);}
+  .role-opt input:checked + .card svg{stroke:var(--teal);}
+  .role-caption{font-size:0.82rem;margin-bottom:22px;}
+  .role-caption b{color:var(--ink);}
+
+  .top-alert{
+    display:none;align-items:flex-start;gap:10px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.28);
+    color:var(--red);padding:13px 16px;border-radius:10px;font-size:0.85rem;margin-bottom:18px;
+  }
+  .top-alert.show{display:flex;}
+  .top-alert svg{width:18px;height:18px;flex-shrink:0;stroke:var(--red);fill:none;stroke-width:1.8;margin-top:1px;}
+  .top-alert.ok{background:rgba(12,110,106,0.08);border-color:rgba(12,110,106,0.28);color:var(--teal-dark);}
+  .top-alert.ok svg{stroke:var(--teal-dark);}
+
+  .form-group{margin-bottom:18px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-group label{display:block;font-family:var(--sans);font-weight:600;font-size:0.76rem;color:var(--teal-dark);margin-bottom:8px;letter-spacing:.02em;}
+  .form-group input{
+    width:100%;padding:13px 16px;border:1.5px solid var(--line);border-radius:10px;background:var(--white);
+    font-family:var(--sans);font-size:0.95rem;color:var(--ink);transition:border-color .25s;
+  }
+  .form-group input:focus{outline:none;border-color:var(--teal);}
+  .form-group.invalid input{border-color:var(--red);}
+  .form-group .error-msg{display:none;font-size:0.78rem;color:var(--red);margin-top:7px;}
+  .form-group.invalid .error-msg{display:block;}
+
+  .pw-wrap{position:relative;}
+  .pw-wrap input{padding-right:46px;}
+  .pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;padding:6px;}
+  .pw-toggle svg{width:18px;height:18px;stroke:var(--ink-soft);fill:none;stroke-width:1.6;}
+  .pw-strength{height:3px;background:var(--line);border-radius:2px;margin-top:8px;overflow:hidden;}
+  .pw-strength-bar{height:100%;width:0%;background:var(--red);transition:width .3s, background .3s;}
+
+  .form-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .remember{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--ink-soft);}
+  .remember input{accent-color:var(--teal);}
+  .forgot-link{font-size:0.85rem;color:var(--teal);font-weight:600;}
+  .remember-error{display:none;font-size:0.78rem;color:var(--red);margin-bottom:14px;}
+  .remember-error.show{display:block;}
+
+  .btn-block{width:100%;padding:15px;border-radius:32px;border:none;background:var(--teal);color:var(--cream);font-weight:700;font-size:0.95rem;margin-top:6px;transition:background .3s, transform .3s, box-shadow .3s;box-shadow:0 14px 30px rgba(12,110,106,0.28);}
+  .btn-block:hover{background:var(--teal-dark);}
+
+  .switch-note{text-align:center;font-size:0.88rem;color:var(--ink-soft);margin-top:22px;}
+  .switch-note a{color:var(--teal);font-weight:700;}
+
+  .auth-view{display:none;}
+  .auth-view.active{display:block;animation:panelIn .5s ease;}
+  @keyframes panelIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+  @media (max-width:980px){
+    .auth-wrap{grid-template-columns:1fr;}
+    .auth-visual{display:none;}
+    .auth-panel{min-height:100vh;}
+  }
+  @media (max-width:520px){
+    .form-row{grid-template-columns:1fr;}
+    .role-picker{grid-template-columns:1fr 1fr;}
+    .auth-panel{padding:26px 20px 40px;}
+    .back-link{margin-top:26px;}
+  }
+
+  /* ============ PRELOADER (simple) ============ */
+  .preloader{
+    position:fixed; inset:0; z-index:9999;
+    background:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity .5s ease;
+  }
+  .preloader.hide{ opacity:0; pointer-events:none; }
+  .preloader img{ height:42px; width:auto; border-radius:8px; animation:preloaderPulse 1.3s ease-in-out infinite; }
+  @keyframes preloaderPulse{ 0%,100%{ opacity:.45; transform:scale(.94); } 50%{ opacity:1; transform:scale(1); } }
+  @media (prefers-reduced-motion: reduce){ .preloader img{ animation:none; } .preloader{ transition:none; } }
+</style>
+</head>
+<body>
+<div class="preloader" id="preloader" role="status" aria-live="polite" aria-label="Loading">
+  <img src="stackly-logo.webp" alt="">
+</div>
+
+<div class="auth-wrap">
+
+  <div class="auth-visual">
+    <img class="bg-img" src="./assets/b2.webp" alt="Swimmer training in a lane at Stackly Aqua Academy">
+    <div class="mesh"></div>
+    <div class="auth-visual-content">
+      <a href="index.html" class="av-logo"><img src="stackly-logo.webp" alt="Stackly Aqua Academy"></a>
+      <div class="av-hero">
+        <div class="av-eyebrow">Student &amp; Admin Portal</div>
+        <h1 id="heroTitle">Every stroke tracked, <em>every</em> milestone celebrated.</h1>
+        <p>Check batch timings, track your progress card, and message your coach — all from one account.</p>
+        <div class="av-stats">
+          <div><h3>1200+</h3><span>Swimmers Trained</span></div>
+          <div><h3>12 yrs</h3><span>In Operation</span></div>
+          <div><h3>4.9★</h3><span>Parent Rating</span></div>
+        </div>
+      </div>
+      <div class="av-quote">
+        <p>"The parent portal makes it so easy to see attendance and progress notes — I always know exactly how my daughter's batch is going."</p>
+        <div class="who">Priya Ramesh — Parent, Little Splashers</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-panel">
+    <div class="auth-box">
+
+      <div class="mode-switch" id="modeSwitch" data-mode="signin">
+        <div class="slider"></div>
+        <button class="active" data-mode="signin" type="button">Log In</button>
+        <button data-mode="signup" type="button">Sign Up</button>
+      </div>
+
+      <!-- ===================== LOG IN ===================== -->
+      <div class="auth-view active" id="viewSignin">
+        <div class="auth-eyebrow">Welcome back</div>
+        <h1>Log in to your account</h1>
+
+        <div class="role-picker" id="loginRolePicker">
+          <label class="role-opt">
+            <input type="radio" name="login-role" value="student" checked>
+            <div class="card"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>Student / Parent</div>
+          </label>
+          <label class="role-opt">
+            <input type="radio" name="login-role" value="admin">
+            <div class="card"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>Admin / Coach</div>
+          </label>
+        </div>
+        <div class="role-caption" id="loginRoleCaption">Signing in as a <b>student / parent</b></div>
+
+        <div id="loginAlert" class="top-alert">
+          <svg viewBox="0 0 24 24"><path d="M12 8v5M12 16h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
+          <span id="loginAlertText">Please fill in a valid email and password.</span>
+        </div>
+
+        <form id="formLogin" novalidate>
+          <div class="form-group" id="fg-lemail">
+            <label for="loginEmail">Email address</label>
+            <input type="email" id="loginEmail" placeholder="you@email.com" autocomplete="username">
+            <span class="error-msg">Enter a valid email address — no spaces.</span>
+          </div>
+          <div class="form-group" id="fg-lpass">
+            <label for="loginPassword">Password</label>
+            <div class="pw-wrap">
+              <input type="password" id="loginPassword" placeholder="At least 8 characters" autocomplete="current-password" minlength="8">
+              <button type="button" class="pw-toggle" data-target="loginPassword" aria-label="Show password">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <span class="error-msg">Password must be at least 8 characters.</span>
+          </div>
+          <div class="form-meta">
+            <label class="remember"><input type="checkbox" id="rememberMe"> Remember me</label>
+            <a href="./404.html" class="forgot-link">Forgot password?</a>
+          </div>
+          <div class="remember-error" id="rememberError">Please check "Remember me" to log in.</div>
+          <button type="submit" class="btn-block" id="loginSubmit">Log in as <span id="loginRoleLabel">Student</span> →</button>
+        </form>
+        <div class="switch-note">New here? <a href="#" onclick="switchMode('signup');return false;">Create an account</a></div>
+      </div>
+
+      <!-- ===================== SIGN UP ===================== -->
+      <div class="auth-view" id="viewSignup">
+        <div class="auth-eyebrow">Join Stackly Aqua</div>
+        <h1>Create your account</h1>
+
+        <div id="signupAlert" class="top-alert ok">
+          <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          <span id="signupAlertText">Account created — please log in.</span>
+        </div>
+
+        <form id="formSignup" novalidate>
+          <div class="form-row">
+            <div class="form-group" id="fg-sfname">
+              <label for="signupFirstName">First name</label>
+              <input type="text" id="signupFirstName" placeholder="First name">
+              <span class="error-msg">Letters only — no spaces, numbers or symbols.</span>
+            </div>
+            <div class="form-group" id="fg-slname">
+              <label for="signupLastName">Last name</label>
+              <input type="text" id="signupLastName" placeholder="Last name">
+              <span class="error-msg">Letters only — no spaces, numbers or symbols.</span>
+            </div>
+          </div>
+
+          <div class="role-picker" id="signupRolePicker">
+            <label class="role-opt">
+              <input type="radio" name="signup-role" value="student" checked>
+              <div class="card"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>Student / Parent</div>
+            </label>
+            <label class="role-opt">
+              <input type="radio" name="signup-role" value="admin">
+              <div class="card"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>Admin / Coach</div>
+            </label>
+          </div>
+          <div class="role-caption" id="signupRoleCaption">Creating an account as a <b>student / parent</b></div>
+
+          <div class="form-group" id="fg-semail">
+            <label for="signupEmail">Email address</label>
+            <input type="email" id="signupEmail" placeholder="you@email.com" autocomplete="username">
+            <span class="error-msg">Enter a valid email address — no spaces.</span>
+          </div>
+          <div class="form-group" id="fg-sphone">
+            <label for="signupPhone">Mobile number</label>
+            <input type="tel" id="signupPhone" placeholder="10-digit mobile number" inputmode="numeric" autocomplete="tel">
+            <span class="error-msg">Enter a valid 10-digit mobile number — digits only, no spaces.</span>
+          </div>
+          <div class="form-group" id="fg-spass">
+            <label for="signupPassword">Create password</label>
+            <div class="pw-wrap">
+              <input type="password" id="signupPassword" placeholder="At least 8 characters" autocomplete="new-password">
+              <button type="button" class="pw-toggle" data-target="signupPassword" aria-label="Show password">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="pw-strength"><div class="pw-strength-bar" id="pwStrengthBar"></div></div>
+            <span class="error-msg">Minimum 8 characters.</span>
+          </div>
+          <div class="form-group" id="fg-scpass">
+            <label for="signupConfirm">Confirm password</label>
+            <div class="pw-wrap">
+              <input type="password" id="signupConfirm" placeholder="Re-enter password" autocomplete="new-password">
+              <button type="button" class="pw-toggle" data-target="signupConfirm" aria-label="Show password">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <span class="error-msg">Passwords do not match.</span>
+          </div>
+          <button type="submit" class="btn-block">Create account →</button>
+        </form>
+        <div class="switch-note">Already registered? <a href="#" onclick="switchMode('signin');return false;">Log in</a></div>
+      </div>
+
+    </div>
+
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to Home
+    </a>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(function(){
+  var htmlEl = document.documentElement;
+  var pre = document.getElementById('preloader');
+  var start = Date.now();
+  var MIN_MS = 350;
+  var PATH = (window.location.pathname.split('/').pop() || 'login.html');
+
+  function restoreScroll(){
+    try{
+      var raw = sessionStorage.getItem('stackly_restore_scroll');
+      if(raw){
+        var data = JSON.parse(raw);
+        if(data && data.path === PATH){
+          sessionStorage.removeItem('stackly_restore_scroll');
+          if(typeof data.y === 'number'){
+            var prevBehavior = htmlEl.style.scrollBehavior;
+            htmlEl.style.scrollBehavior = 'auto';
+            window.scrollTo(0, data.y);
+            void htmlEl.offsetHeight;
+            htmlEl.style.scrollBehavior = prevBehavior || '';
+          }
+        }
+      }
+    }catch(e){}
+  }
+
+  function reveal(){
+    restoreScroll();
+    if(pre){
+      pre.classList.add('hide');
+      setTimeout(function(){ pre.style.display = 'none'; }, 550);
+    }
+  }
+  function onReady(){
+    var wait = Math.max(0, MIN_MS - (Date.now() - start));
+    setTimeout(reveal, wait);
+  }
+  if(document.readyState === 'complete'){ onReady(); }
+  else{ window.addEventListener('load', onReady); }
+
+  /* remember exactly where on the page we were, so a 404 page's "Go Back" returns here */
+  window.addEventListener('beforeunload', function(){
+    try{ sessionStorage.setItem('stackly_last_position', JSON.stringify({ path: PATH, y: window.scrollY || window.pageYOffset || 0 })); }catch(e){}
+  });
+})();
+
+(function(){
+  // ---- hero title word reveal ----
+  var heroTitle = document.getElementById('heroTitle');
+  if (heroTitle) {
+    var words = heroTitle.innerHTML.split(' ');
+    heroTitle.innerHTML = words.map(function(w){ return '<span class="split-word"><span>'+w+'</span></span>'; }).join(' ');
+  }
+
+  if (window.gsap) {
+    gsap.set('.av-hero p, .av-stats, .av-quote', { opacity: 0, y: 16 });
+    gsap.set('.auth-box', { opacity: 0, y: 22 });
+    gsap.set('.back-link', { opacity: 0 });
+    var tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+    tl.to('.split-word span', { y: '0%', duration: 1, stagger: 0.05 })
+      .to('.av-hero p, .av-stats, .av-quote', { opacity: 1, y: 0, duration: 0.7, stagger: 0.12 }, '-=0.5')
+      .to('.back-link', { opacity: 1, duration: 0.5 }, '-=0.6')
+      .to('.auth-box', { opacity: 1, y: 0, duration: 0.7 }, '-=0.6');
+  } else {
+    document.querySelectorAll('.av-hero p, .av-stats, .av-quote, .auth-box, .back-link').forEach(function(el){ el.style.opacity = 1; });
+  }
+
+  // ---- mode switch (Log In / Sign Up tabs) ----
+  var modeSwitch = document.getElementById('modeSwitch');
+  var views = { signin: document.getElementById('viewSignin'), signup: document.getElementById('viewSignup') };
+
+  window.switchMode = function(mode){
+    modeSwitch.setAttribute('data-mode', mode);
+    modeSwitch.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-mode') === mode); });
+    Object.keys(views).forEach(function(k){ if(views[k]) views[k].classList.toggle('active', k === mode); });
+  };
+  modeSwitch.querySelectorAll('button').forEach(function(btn){
+    btn.addEventListener('click', function(){ switchMode(btn.getAttribute('data-mode')); });
+  });
+
+  // ---- role pickers ----
+  function wireRolePicker(name, captionId, submitLabelId){
+    document.querySelectorAll('input[name="'+name+'"]').forEach(function(radio){
+      radio.addEventListener('change', function(){
+        var val = radio.value;
+        var label = val === 'student' ? 'student / parent' : 'admin / coach';
+        var caption = document.getElementById(captionId);
+        if(caption) caption.innerHTML = (name.indexOf('signup') === 0 ? 'Creating an account as a ' : 'Signing in as a ') + '<b>'+label+'</b>';
+        if(submitLabelId){
+          var lbl = document.getElementById(submitLabelId);
+          if(lbl) lbl.textContent = val === 'student' ? 'Student' : 'Admin';
+        }
+      });
+    });
+  }
+  wireRolePicker('login-role', 'loginRoleCaption', 'loginRoleLabel');
+  wireRolePicker('signup-role', 'signupRoleCaption', null);
+
+  // ---- password show/hide ----
+  document.querySelectorAll('.pw-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var input = document.getElementById(btn.getAttribute('data-target'));
+      input.type = input.type === 'password' ? 'text' : 'password';
+    });
+  });
+
+  // ---- password strength ----
+  var spw = document.getElementById('signupPassword');
+  if(spw){
+    spw.addEventListener('input', function(){
+      var v = spw.value;
+      var score = 0;
+      if(v.length >= 8) score++;
+      if(/[A-Z]/.test(v)) score++;
+      if(/[0-9]/.test(v)) score++;
+      if(/[^A-Za-z0-9]/.test(v)) score++;
+      var bar = document.getElementById('pwStrengthBar');
+      var pct = (score/4)*100;
+      var colors = ['#c0392b','#c0392b','#d9a441','#0c6e6a','#0c6e6a'];
+      bar.style.width = pct + '%';
+      bar.style.background = colors[score];
+    });
+  }
+
+  // ---- strict validation helpers ----
+  function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function isPhone(v){ return /^[6-9][0-9]{9}$/.test(v); }
+  function setInvalid(id, invalid){
+    var el = document.getElementById(id);
+    if(el) el.classList.toggle('invalid', invalid);
+  }
+  /* Name fields: letters only — no digits, no spaces, no symbols */
+  function attachNameOnly(input){
+    if(!input) return;
+    input.addEventListener('input', function(){
+      var cleaned = input.value.replace(/[^A-Za-z]/g, '');
+      if(cleaned !== input.value) input.value = cleaned;
+    });
+    input.addEventListener('keypress', function(e){
+      if(e.key.length === 1 && !/[A-Za-z]/.test(e.key)) e.preventDefault();
+    });
+  }
+  /* Mobile number: digits only, no letters, no spaces, capped at 10 */
+  function attachDigitsOnly(input, maxLen){
+    if(!input) return;
+    input.addEventListener('input', function(){
+      var cleaned = input.value.replace(/[^0-9]/g, '').slice(0, maxLen || 10);
+      if(cleaned !== input.value) input.value = cleaned;
+    });
+    input.addEventListener('keypress', function(e){
+      if(e.key.length === 1 && !/[0-9]/.test(e.key)) e.preventDefault();
+    });
+  }
+  /* Email / password: no spaces allowed while typing */
+  function attachNoSpace(input){
+    if(!input) return;
+    input.addEventListener('input', function(){
+      if(/\s/.test(input.value)) input.value = input.value.replace(/\s/g, '');
+    });
+    input.addEventListener('keypress', function(e){
+      if(e.key === ' ') e.preventDefault();
+    });
+  }
+  attachNameOnly(document.getElementById('signupFirstName'));
+  attachNameOnly(document.getElementById('signupLastName'));
+  attachNoSpace(document.getElementById('loginEmail'));
+  attachNoSpace(document.getElementById('signupEmail'));
+  attachDigitsOnly(document.getElementById('signupPhone'), 10);
+
+  // ---- log in form ----
+  var formLogin = document.getElementById('formLogin');
+  var rememberBox = document.getElementById('rememberMe');
+  var rememberError = document.getElementById('rememberError');
+  rememberBox.addEventListener('change', function(){
+    if(rememberBox.checked) rememberError.classList.remove('show');
+  });
+
+  formLogin.addEventListener('submit', function(e){
+    e.preventDefault();
+    var email = document.getElementById('loginEmail').value.trim();
+    var pass = document.getElementById('loginPassword').value;
+    var emailOk = isEmail(email);
+    var passOk = pass.length >= 8;
+    var rememberOk = rememberBox.checked;
+    setInvalid('fg-lemail', !emailOk);
+    setInvalid('fg-lpass', !passOk);
+    rememberError.classList.toggle('show', !rememberOk);
+    var alertBox = document.getElementById('loginAlert');
+    if(!emailOk || !passOk){
+      alertBox.classList.add('show');
+      return;
+    }
+    alertBox.classList.remove('show');
+    if(!rememberOk){
+      return;
+    }
+
+    var roleEl = document.querySelector('input[name="login-role"]:checked');
+    var role = roleEl ? roleEl.value : 'student';
+    var name = email.split('@')[0].replace(/[._]+/g, ' ').replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+
+    try{
+      sessionStorage.removeItem('stackly_role'); sessionStorage.removeItem('stackly_name'); sessionStorage.removeItem('stackly_email');
+      localStorage.setItem('stackly_role', role);
+      localStorage.setItem('stackly_name', name);
+      localStorage.setItem('stackly_email', email);
+    }catch(err){}
+
+    var btn = document.getElementById('loginSubmit');
+    btn.textContent = 'Logging in…';
+    var destination = role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
+    setTimeout(function(){
+      window.location.href = destination;
+    }, 700);
+  });
+
+  // ---- sign up form ----
+  var formSignup = document.getElementById('formSignup');
+  formSignup.addEventListener('submit', function(e){
+    e.preventDefault();
+    var fn = document.getElementById('signupFirstName').value.trim();
+    var ln = document.getElementById('signupLastName').value.trim();
+    var email = document.getElementById('signupEmail').value.trim();
+    var phone = document.getElementById('signupPhone').value.trim();
+    var pw = document.getElementById('signupPassword').value;
+    var cpw = document.getElementById('signupConfirm').value;
+    var ok = true;
+    if(!fn){ setInvalid('fg-sfname', true); ok = false; } else setInvalid('fg-sfname', false);
+    if(!ln){ setInvalid('fg-slname', true); ok = false; } else setInvalid('fg-slname', false);
+    if(!isEmail(email)){ setInvalid('fg-semail', true); ok = false; } else setInvalid('fg-semail', false);
+    if(!isPhone(phone)){ setInvalid('fg-sphone', true); ok = false; } else setInvalid('fg-sphone', false);
+    if(pw.length < 8){ setInvalid('fg-spass', true); ok = false; } else setInvalid('fg-spass', false);
+    if(cpw !== pw || !cpw){ setInvalid('fg-scpass', true); ok = false; } else setInvalid('fg-scpass', false);
+    if(!ok) return;
+    document.getElementById('signupAlert').classList.add('show');
+    setTimeout(function(){ switchMode('signin'); }, 900);
+  });
+})();
+</script>
+</body>
+</html>
